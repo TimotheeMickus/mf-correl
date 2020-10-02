@@ -51,7 +51,6 @@ numpydoc==1.0.0
 overrides==3.0.0
 packaging==20.4
 parsimonious==0.8.1
-pkg-resources==0.0.0
 plac==0.9.6
 pluggy==0.13.1
 preshed==2.0.1
