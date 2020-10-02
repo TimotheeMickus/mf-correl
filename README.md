@@ -16,3 +16,6 @@ Pre-trained ord embeddings are available from their original repositories, or at
 Sentence encoders are from the original repositories: [SkipThoughts](https://github.com/ryankiros/skip-thoughts) (written in python 2), [InferSent](https://github.com/facebookresearch/InferSent).
 See also the original Google Collab for [USE DAN](https://tfhub.dev/google/universal-sentence-encoder/4) and [USE Transformer](https://tfhub.dev/google/universal-sentence-encoder-large/5).
 
+## Structure
+
+The `shared/` directory contains pieces of code shared by some or all experiments. Directories `exp1/`, `exp2/` and `exp3/` contain data & code for artificial language experiments, definition experiments and sentence experiments respectively.
