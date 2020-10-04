@@ -1,4 +1,5 @@
-from compotest import *
+# TODO: fix relative imports.
+from compute_distances import *
 
 import csv
 import string
@@ -15,7 +16,7 @@ def read_tsv(fn):
 	with open(fn) as istr:
 		data = csv.reader(istr, delimiter="\t")
 		data = map(parse_line, data)
-		data = enumerate(data)	
+		data = enumerate(data)
 		data = list(data)
 	return data
 
@@ -36,7 +37,7 @@ def pair_to_json(pair,
 	stops=spacy.lang.en.stop_words.STOP_WORDS | {'d', 's', "'", 're', 've', 'll', 'm'} | set(string.punctuation)):
 	# unpack
 	(i1, (s1, v1)), (i2, (s2, v2)) = pair
-	
+
 
 	# meaning scores
 	meaning_scores = {"l2-USE":l2(v1, v2), "cdist-USE":cdist(v1, v2)}
@@ -69,18 +70,20 @@ def pair_to_json(pair,
 			"levenshtein_syn_f_score":levenshtein(syn_c1_f, syn_c2_f),
 			"levenshtein_syn_fn_score":levenshtein_normalised(syn_c1_f, syn_c2_f),
 		})
-	
+
 	# return
 	jdict = {
 		"idx": [i1, i2],
 		"sentences":[s1,s2],
-		"meaning_scores":meaning_scores, 
+		"meaning_scores":meaning_scores,
 		"text_scores":text_scores,
 	}
 	return json.dumps(jdict)
 
 if __name__=="__main__":
-	p = argparse.ArgumentParser()
+	p = argparse.ArgumentParser("""Computing distances for sentences pairs.
+		Takes as input sentence embedding + tokenized sentence TSV (see embs/).
+		Produces one JSON per sentence pair.""")
 	p.add_argument("--input", type=str, help="input file", required=True)
 	p.add_argument("--output", type=str, help="output file", default="output.json")
 	args = p.parse_args()
@@ -92,6 +95,3 @@ if __name__=="__main__":
 			print(jstring, file=ostr)
 	pool.close()
 	pool.join()
-	
-	
-
