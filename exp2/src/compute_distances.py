@@ -19,6 +19,7 @@ import json
 import spacy
 import tqdm
 
+# TODO: modularize distances
 
 #### Meaning distances
 def cdist(v1, v2):
@@ -82,7 +83,7 @@ def levenshtein_normalised(str1, str2):
 @functools.lru_cache(maxsize=524288)
 def to_brkt(tree):
 	"""
-		Convert AllenNLP square bracket tree  format to apted curly bracket tree format
+		Convert AllenNLP square bracket tree format to apted curly bracket tree format
 	"""
 	prep = tree.replace('(', '{').replace(')', '}')
 	prep = re.sub(r" ([^{} ]+)}",r" {\1}}", prep)
