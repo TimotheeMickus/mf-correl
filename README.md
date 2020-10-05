@@ -18,4 +18,6 @@ See also the original Google Hub for [USE DAN](https://tfhub.dev/google/universa
 
 ## Structure
 
-The `shared/` directory contains pieces of code shared by some or all experiments. Directories `exp1/`, `exp2/` and `exp3/` contain data & code for artificial language experiments, definition experiments and sentence experiments respectively.
+Code is stored in `src/`. The `src/shared/` directory contains pieces of code shared by some or all experiments. Script starting with `src/exp1_`, `src/exp2_` and `src/exp3_` correspond to code for artificial language experiments, definition experiments and sentence experiments respectively. Subdirectory `src/exp3_embs` contains specifically scripts to compute or retrieve sentence embeddings.
+
+Data is available under `data/`, subdirectories correspond to different experiments.
