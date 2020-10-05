@@ -1,5 +1,5 @@
-# TODO: fix relative imports.
-from compute_distances import *
+# TODO: fix imports.
+from shared.distances import *
 
 import csv
 import string
