@@ -1,9 +1,9 @@
-# mf-correl
-Repository for the paper ["What Meaning-Form Correlation Has to Compose With"](nowhere.org).
+# What Meaning-Form Correlation Has to Compose With
+This is the repository for the [COLING 2020](https://coling2020.org/) paper ["What Meaning-Form Correlation Has to Compose With"](nowhere.org/place-holder).
 
 Much assembly required. This repository is a hot mess of monkeypatches held together by off-brand brown tape.
 
-## Install, external dependencies, aknowledgments
+## Install, external dependencies, acknowledgments
 
 Most dependencies are covered in the `pip.requirements.txt` file. You might need to install the spacy model for English: `python3 -m spacy download en_core_web_sm`. You will also need to download NLTK-Wordnet: `python3 -c "import nltk; nltk.download('wordnet')"`.
 
