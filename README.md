@@ -5,11 +5,22 @@ Much assembly required. This repository is a hot mess of monkeypatches held toge
 
 ## Install, external dependencies, acknowledgments
 
-Most dependencies are covered in the `pip.requirements.txt` file. You might need to install the spacy model for English: `python3 -m spacy download en_core_web_sm`. You will also need to download NLTK-Wordnet: `python3 -c "import nltk; nltk.download('wordnet')"`.
+Most dependencies are covered in the `pip.requirements.txt` file. You might need to install a spacy model for English:
+````
+python3 -m spacy download en_core_web_sm
+````
+You may also need to download NLTK-Wordnet:
+````
+python3 -c "import nltk; nltk.download('wordnet')"
+````
 
 Mantel tests are from J. W. Carr's github ([see here](https://github.com/jwcarr/MantelTest)). We only include it here for convenience, the original code hasn't been modified.
 
-The implementation of APTED by Pawlik & Augsten is from the [repository](https://github.com/DatabaseGroup/apted) (written in Java). The JAR we provide has been hacked to accept a file of pairs of trees at once, instead of a single pair: calls should resemble something like `java -jar apted.jar trees.tsv`. The single edited Java file is available for reference in the directory `shared/apted/`.
+The implementation of APTED by Pawlik & Augsten is from the [repository](https://github.com/DatabaseGroup/apted) (written in Java). The JAR we provide has been hacked to accept a file of pairs of trees at once, instead of a single pair: calls should resemble something like:
+````
+java -jar apted.jar trees.tsv
+````
+The single edited Java file is available for reference in the directory `shared/apted/`.
 
 Pre-trained word embeddings are available from their original repositories, or at these links: [Word2Vec](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing), [GloVe 6B](http://nlp.stanford.edu/data/glove.6B.zip) and [840B](http://nlp.stanford.edu/data/glove.840B.300d.zip), [FastText](https://dl.fbaipublicfiles.com/fasttext/vectors-wiki/wiki.en.zip)
 
