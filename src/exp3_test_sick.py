@@ -4,7 +4,7 @@ import numpy as np
 import scipy.stats
 import torch
 
-PATH_TO_SICK = "../data/SICK/SICK.txt" 
+PATH_TO_SICK = "../data/SICK/SICK.txt"
 
 def cdist(v_a, v_b):
 	return 1 - (v_a.dot(v_b)) / (np.linalg.norm(v_a) * np.linalg.norm(v_b))
@@ -118,23 +118,23 @@ def get_rand_emb(filepath, vocab):
 	with open(filepath, "rb") as istr:
 		embedding_maker = pickle.load(istr)
 	embs = {sentence:embedding_maker[sentence].view(-1) for sentence in vocab}
-	return embs		
+	return embs
 
-def get_l2_seq(embs, men_pairs):
-	return np.array([np.linalg.norm(embs[a] - embs[b]) for a, b in men_pairs])
+def get_l2_seq(embs, sick_pairs):
+	return np.array([np.linalg.norm(embs[a] - embs[b]) for a, b in sick_pairs])
 
-def get_cdist_seq(embs, men_pairs):
-	return np.array([cdist(embs[a], embs[b]) for a, b in men_pairs])
+def get_cdist_seq(embs, sick_pairs):
+	return np.array([cdist(embs[a], embs[b]) for a, b in sick_pairs])
 
 if __name__ == "__main__":
 	import argparse
-	p = argparse.ArgumentParser("Compute results on MEN for one set of embeddings")
-	p.add_argument("--emb_path", type=str, help="input embeddings to test", required=False)	
-	p.add_argument("--emb_arch", type=str, help="input embeddings architecture", required=True, choices=["infersent", "USE-DAN", "USE-Tf", "skipthought", "randlstm", "randtf", "randembs"])	
+	p = argparse.ArgumentParser("Compute results on SICK for one set of embeddings")
+	p.add_argument("--emb_path", type=str, help="input embeddings to test", required=False)
+	p.add_argument("--emb_arch", type=str, help="input embeddings architecture", required=True, choices=["infersent", "USE-DAN", "USE-Tf", "skipthought", "randlstm", "randtf", "randembs"])
 	args = p.parse_args()
-	
+
 	data, vocab = load_SICK()
-	
+
 	load_func = {
 		"infersent":get_infersent_embs,
 		"USE-DAN":get_USE_DAN_embs,
@@ -157,5 +157,3 @@ if __name__ == "__main__":
 	pr_cd, pp_cd = scipy.stats.pearsonr(cdist_seq, targets)
 	print("l2: spearman:", sr_l2, sp_l2, ", pearson:", pr_l2, pp_l2)
 	print("cdist: spearman:", sr_cd, sp_cd, ", pearson:", pr_cd, pp_cd)
-	
-		
