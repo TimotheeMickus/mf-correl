@@ -31,6 +31,6 @@ Lastly, the two datasets used to evaluate embeddings, the [MEN](https://staff.fn
 
 ## Structure
 
-Code is stored in `src/`. The `src/shared/` directory contains pieces of code shared by some or all experiments. Script starting with `src/exp1_`, `src/exp2_` and `src/exp3_` correspond to code for artificial language experiments, definition experiments and sentence experiments respectively. Subdirectory `src/exp3_embs` contains specifically scripts to compute or retrieve sentence embeddings.
+Code is stored in `src/`. The `src/shared/` directory contains pieces of code shared by some or all experiments. Script starting with `src/exp1_`, `src/exp2_` and `src/exp3_` correspond to code for artificial language experiments, definition experiments and sentence experiments respectively. Subdirectory `src/exp3_embs/` contains specifically scripts to compute or retrieve sentence embeddings.
 
 Data is available under `data/`, subdirectories correspond to different experiments.

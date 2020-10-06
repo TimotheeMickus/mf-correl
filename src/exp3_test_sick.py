@@ -67,12 +67,12 @@ def get_skipthought_embs(filepath, vocab):
 	embs = dict(zip(vocab, np.array(vectors)))
 	return embs
 
-
+# fix for pickle
 def get_random_embedding():
 	return torch.randn(1, 512)
 
 def get_randlstm_emb(filepath, vocab):
-	from get_randlstm_embs import get_random_embedding
+	from exp3_embs.get_randlstm_embs import get_random_embedding
 	import pickle
 	import torch
 	with open(filepath, "rb") as istr:
@@ -88,7 +88,7 @@ def get_randlstm_emb(filepath, vocab):
 	return embs
 
 def get_randtf_emb(filepath, vocab):
-	from get_randtf_embs import get_random_embedding
+	from exp3_embs.get_randtf_embs import get_random_embedding
 	import pickle
 	import math
 	import torch
@@ -113,7 +113,7 @@ def get_randtf_emb(filepath, vocab):
 	return embs
 
 def get_rand_emb(filepath, vocab):
-	from get_rand_embs import get_random_embedding
+	from exp3_embs.get_rand_embs import get_random_embedding
 	import pickle
 	with open(filepath, "rb") as istr:
 		embedding_maker = pickle.load(istr)
