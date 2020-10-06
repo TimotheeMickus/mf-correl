@@ -1,9 +1,17 @@
 # TODO: fix imports.
-from shared.distances import *
+from shared.distances import levenshtein, levenshtein_normalised
 
 import csv
 import string
 from nltk.corpus import wordnet as wn
+import collections
+import itertools
+import numpy as np
+import spacy
+spacy.load('en_core_web_sm')
+import json
+import multiprocessing
+import tqdm
 
 
 def parse_line(line):
@@ -11,6 +19,7 @@ def parse_line(line):
 	sentence, emb = sentence.split(), emb.split()
 	emb = np.array(list(map(float, emb)))
 	return (list(sentence), emb)
+
 
 def read_tsv(fn):
 	with open(fn) as istr:
@@ -20,16 +29,20 @@ def read_tsv(fn):
 		data = list(data)
 	return data
 
+
 def make_pairs(data):
 	return itertools.combinations(data, 2)
 
+
 def to_chr_seq(w2c, s):
 	return ''.join(map(chr, map(w2c.__getitem__, s)))
+
 
 def default_synonym(word):
 	cands = wn.synsets(word)
 	if not cands: return word
 	return cands[0].lemma_names()[0]
+
 
 def pair_to_json(pair,
 	w2c = collections.defaultdict(itertools.count().__next__),
@@ -37,7 +50,6 @@ def pair_to_json(pair,
 	stops=spacy.lang.en.stop_words.STOP_WORDS | {'d', 's', "'", 're', 've', 'll', 'm'} | set(string.punctuation)):
 	# unpack
 	(i1, (s1, v1)), (i2, (s2, v2)) = pair
-
 
 	# meaning scores
 	meaning_scores = {"l2-USE":l2(v1, v2), "cdist-USE":cdist(v1, v2)}
@@ -80,7 +92,9 @@ def pair_to_json(pair,
 	}
 	return json.dumps(jdict)
 
+
 if __name__=="__main__":
+	import argparse
 	p = argparse.ArgumentParser("""Computing distances for sentences pairs.
 		Takes as input sentence embedding + tokenized sentence TSV (see embs/).
 		Produces one JSON per sentence pair.""")

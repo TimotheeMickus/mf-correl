@@ -17,6 +17,7 @@ import argparse
 import sys
 import json
 import spacy
+spacy.load('en_core_web_sm')
 import tqdm
 
 from shared.distances import *
