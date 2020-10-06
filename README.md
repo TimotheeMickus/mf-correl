@@ -5,7 +5,7 @@ Much assembly required. This repository is a hot mess of monkeypatches held toge
 
 ## Install, external dependencies, acknowledgments
 
-Most dependencies are covered in the `pip.requirements.txt` file. You might need to install a spacy model for English:
+Code has been tested and developed with python 3.7 (Ubuntu 18.04). Most dependencies are covered in the `pip.requirements.txt` file; some might require time to install (e.g., Tensorflow 1 only ships with python < 3.8 for some reason; Spacy 2.1.9 seems to now have broken down in flames due to an issue in one of its dependencies). You might need to install a spacy model for English:
 ````
 python3 -m spacy download en_core_web_sm
 ````
