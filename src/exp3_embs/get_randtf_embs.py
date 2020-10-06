@@ -15,7 +15,7 @@ if __name__ == "__main__":
 	p = argparse.ArgumentParser("Make random sentence embeddings with an untrained Transformer")
 
 	p.add_argument("--input_dir", type=str, help="input directory", required=True)
-	p.add_argument("--pickle", type=str, help="pickle filepath to save model", default="randlstm.pkl")
+	p.add_argument("--pickle", type=str, help="pickle filepath to save model", default="randtf.pkl")
 
 	args = p.parse_args()
 	print(datetime.datetime.now(), "process start")
