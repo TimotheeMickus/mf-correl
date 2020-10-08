@@ -1,0 +1,11 @@
+__pycache__/
+.venv/
+.venv2/
+venv/
+**/*.pkl
+**/*.zip
+data/SICK/
+data/MEN/
+skip_thoughts/
+MantelTest/
+InferSent/
