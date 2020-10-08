@@ -1,3 +1,6 @@
+if __name__ != "__main__":
+    raise ImportError("This standalone script should not be imported.")
+
 import itertools as it
 import more_itertools as m_it
 import functools as ft
@@ -69,7 +72,7 @@ def generate_synonym_table(num_synonyms, upper_mwe_len, hol_cat):
 
 NUMBER_RUNS = 50
 for RUN_NUMBER in range(1, NUMBER_RUNS+1):
-    OUTPUT_DIR = 'data/gen-langs/parole/run-%i' % RUN_NUMBER
+    OUTPUT_DIR = 'data/gen-langs/run-%i' % RUN_NUMBER
     MAX_SWAP = 2
     MAX_SYNONYMS = 3
     MAX_UPPER_MWE_LEN = 3

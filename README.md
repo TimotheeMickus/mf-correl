@@ -13,6 +13,7 @@ The process assumes a UNIX environment and access to python 3.7 and python 2.
 Code is stored in `src/`. The `src/shared/` directory contains pieces of code shared by some or all experiments. Script starting with `src/exp1_`, `src/exp2_` and `src/exp3_` correspond to code for artificial language experiments, definition experiments and sentence experiments respectively. Subdirectory `src/exp3_embs/` contains specifically scripts to compute or retrieve sentence embeddings.
 
 Data is available under `data/`, subdirectories correspond to different experiments.
+
 "Push-button" scripts are available to reproduce experiments: [`exp1.sh`](exp1.sh), [`exp2.sh`](exp2.sh), [`exp3.sh`](exp3.sh).
 
 ## Acknowledgments
