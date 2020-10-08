@@ -14,7 +14,11 @@ You may also need to download NLTK-Wordnet:
 python3 -c "import nltk; nltk.download('wordnet')"
 ````
 
-Mantel tests are from J. W. Carr's github ([see here](https://github.com/jwcarr/MantelTest)). We only include it here for convenience, the original code hasn't been modified.
+We used Mantel tests are from J. W. Carr's github ([see here](https://github.com/jwcarr/MantelTest)).
+Install with
+````{.sh}
+git clone https://github.com/jwcarr/MantelTest.git src/shared/MantelTest
+````
 
 The implementation of APTED by Pawlik & Augsten is from the [repository](https://github.com/DatabaseGroup/apted) (written in Java). The JAR we provide has been hacked to accept a file of pairs of trees at once, instead of a single pair: calls should resemble something like:
 ````{.sh}
