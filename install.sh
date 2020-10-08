@@ -47,7 +47,9 @@ wget -P encoder https://dl.fbaipublicfiles.com/infersent/infersent1.pkl
 cd ../../..
 
 echo '3. Evaluation data'
+echo '3a. Bruni & al. MEN dataset'
 wget -P data/ https://staff.fnwi.uva.nl/e.bruni/resources/MEN.zip
 unzip -d data data/MEN.zip
+echo '3a. Baroni & al. SICK dataset'
 wget -P data/ https://zenodo.org/record/2787612/files/SICK.zip
 unzip -d data/SICK data/SICK.zip
