@@ -6,7 +6,7 @@ Much assembly required. This repository is a hot mess of monkeypatches held toge
 ## Installing
 
 An installation script is available to help you set up all external dependencies as required by the code: [`install.sh`](install.sh)
-The process assumes a UNIX environment and access to python 3.7 and python 2.
+The process assumes a UNIX environment and access to functional installs of python 3.7 and python 2 as well as the `virtualenv` tool.
 
 ## Structure
 
@@ -20,7 +20,7 @@ Data is available under `data/`, subdirectories correspond to different experime
 
 We used Mantel tests are from J. W. Carr's github ([see here](https://github.com/jwcarr/MantelTest)).
 
-The implementation of APTED by Pawlik & Augsten is from the [repository](https://github.com/DatabaseGroup/apted) (written in Java). The JAR we provide has been hacked to accept a file of pairs of trees at once, instead of a single pair: calls should resemble something like:
+The implementation of APTED by Pawlik & Augsten is from their original [repository](https://github.com/DatabaseGroup/apted) (written in Java). The JAR we provide has been hacked to accept a file of pairs of trees at once, instead of a single pair; calls should resemble something like:
 ````{.sh}
 java -jar apted.jar trees.tsv
 ````

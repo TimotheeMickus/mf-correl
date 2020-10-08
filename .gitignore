@@ -1,10 +1,17 @@
-__pycache__/
+# virtual environments
 .venv3/
 .venv2/
+
+# python caches, pickle objects, zips...
+__pycache__/
 **/*.pkl
 **/*.zip
+
+# external data for evaluation purposes
 data/SICK/
 data/MEN/
+
+# external code dependencies
 skip_thoughts/
 MantelTest/
 InferSent/
