@@ -34,10 +34,19 @@ python3 src/exp3_embs/get_randtf_embs.py --input_dir  data/exp3 --output_dir dat
 
 echo '1c. evaluate on SICK';
 SICK_PATH='data/SICK/SICK.txt';
-for EMB_ARCH in USE DAN infersent skipthoughts; do
+for EMB_ARCH in USE DAN infersent; do
   echo ${EMB_ARCH};
   python3 src/exp3_test_sick.py --emb_arch ${EMB_ARCH} --sick_path ${SICK_PATH};
 done;
+deactivate;
+
+source $VENV2_ACTIVATION;
+EMB_ARCH=skipthoughts;
+echo ${EMB_ARCH};
+python2 src/exp3_test_sick.py --emb_arch ${EMB_ARCH} --sick_path ${SICK_PATH};
+deactivate;
+
+source $VENV3_ACTIVATION;
 for EMB_ARCH in randlstm randtf; do
   echo ${EMB_ARCH};
   python3 src/exp3_test_sick.py --emb_arch ${EMB_ARCH} --emb_path ${EMB_ARCH}.pkl --sick_path ${SICK_PATH};
