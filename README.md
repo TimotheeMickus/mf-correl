@@ -15,7 +15,7 @@ python3 -c "import nltk; nltk.download('wordnet')"
 ````
 
 We used Mantel tests are from J. W. Carr's github ([see here](https://github.com/jwcarr/MantelTest)).
-Install with
+Install at the expected location with:
 ````{.sh}
 git clone https://github.com/jwcarr/MantelTest.git src/shared/MantelTest
 ````

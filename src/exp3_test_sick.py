@@ -57,7 +57,7 @@ def _get_USE_embs(filepath, vocab, module_url):
 	return embs
 
 def get_skipthought_embs(filepath, vocab):
-	from skip_thoughts import skipthoughts
+	from exp3_embs.skip_thoughts import skipthoughts
 	model = skipthoughts.load_model()
 	encoder = skipthoughts.Encoder(model)
 	vocab = list(vocab)

@@ -8,7 +8,7 @@ VENV2_ACTIVATION=.venv2/bin/activate;
 source $VENV3_ACTIVATION;
 
 for EMB_ARCH in USE DAN infersent skipthoughts randlstm randtf; do
-  mkdir -p data/exp3_${EMB_ARCH};
+  mkdir -p data/embs_exp3/${EMB_ARCH};
 done;
 
 echo '1a. compute sentence embeddings';
@@ -46,7 +46,7 @@ done;
 echo '2a. compute distances';
 EMB_ARCH='USE';
 echo ${EMB_ARCH};
-for EMB_FILE in $(find data/exp3_${EMB_ARCH} -type f -name '*.emb.tsv'); do
+for EMB_FILE in $(find data/embs_exp3/${EMB_ARCH} -type f -name '*.emb.tsv'); do
   echo ${EMB_FILE};
   OUTPUT_FILE={EMB_FILE%.emb.tsv}.json;
   python3 src/exp3_compute_distances_sentences.py --input $EMB_FILE --output ${OUTPUT_FILE};
@@ -54,7 +54,7 @@ done
 
 for EMB_ARCH in DAN infersent skipthoughts randlstm randtf; do
   echo ${EMB_ARCH};
-  for EMB_FILE in $(find data/exp3_${EMB_ARCH} -type f -name '*.emb.tsv'); do
+  for EMB_FILE in $(find data/embs_exp3/${EMB_ARCH} -type f -name '*.emb.tsv'); do
     echo ${EMB_FILE};
     OUTPUT_FILE={EMB_FILE%.emb.tsv}.json;
     python3 src/exp3_compute_distances_sentences.py --input $EMB_FILE --output ${OUTPUT_FILE} --meaning_only;
@@ -62,9 +62,16 @@ for EMB_ARCH in DAN infersent skipthoughts randlstm randtf; do
 done;
 
 echo '2b. patch, merge and sort everything.';
-# TODO
+for EMB_ARCH in USE DAN infersent skipthoughts randlstm randtf; do
+  echo "sort ${EMB_ARCH} output JSONs";
+  python3 src/shared/merge.py --sort $(find data/embs_exp3/${EMB_ARCH} -type f -name '*.json') --key_meanings ${EMB_ARCH}
+done;
+mkdir -p results/exp3
+for RUN in $(seq 1 5); do
+  echo "merge all results for run ${RUN}";
+  python3 src/shared/merge.py --merge $(find data/embs_exp3/ -type f -name '*.json' | grep ${RUN}) --merged_file results/exp3/${RUN}.json
 
-echo '3. compute Mantel exp3_test_sick';
-# TODO
+echo '3. compute Mantel tests';
+python3 src/shared/compute_mantels_per_dir.py --input_dir results/exp3 --output exp3-results-mantels.txt
 
 deactivate;
