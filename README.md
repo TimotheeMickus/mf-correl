@@ -9,9 +9,10 @@ Code has been tested and developed with python 3.7 (Ubuntu 18.04). Most dependen
 ````{.sh}
 python3 -m spacy download en_core_web_sm
 ````
-You may also need to download NLTK-Wordnet:
+You may also need to download NLTK-Wordnet, as well as punkt for infersent:
 ````{.sh}
 python3 -c "import nltk; nltk.download('wordnet')"
+python3 -c "import nltk; nltk.download('punkt')"
 ````
 
 We used Mantel tests are from J. W. Carr's github ([see here](https://github.com/jwcarr/MantelTest)).
@@ -47,6 +48,18 @@ sed -i 's#/u/rkiros/public_html/models/#os.path.join(os.path.dirname(__file__), 
 cd ../../..
 ````
 This should download the original github under `src/exp3_embs/skip_thoughts/`, download the required theano model files and update the skipthoughts file coherently. Now you only need to create a virtual environment for python2 and install the pip dependencies listed in `pip2.requirements.txt`.
+
+InferSent can be set up with the following:
+````{.sh}
+git clone https://github.com/facebookresearch/InferSent.git src/exp3_embs/InferSent
+cd src/exp3_embs/InferSent;
+mkdir embs
+wget -P embs/ http://nlp.stanford.edu/data/glove.840B.300d.zip
+unzip embs/glove.840B.300d.zip -d embs/
+mkdir encoder
+wget -P encoder https://dl.fbaipublicfiles.com/infersent/infersent1.pkl
+cd ../../..
+````
 
 Lastly, the two datasets used to evaluate embeddings, the [MEN](https://staff.fnwi.uva.nl/e.bruni/MEN) by Bruni et al. and [SICK](http://marcobaroni.org/composes/sick.html) by Baroni et al. can be retrieved from their respective homepages.
 

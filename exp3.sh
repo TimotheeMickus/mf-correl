@@ -17,7 +17,7 @@ python3 src/exp3_embs/get_use_embeddings.py --input_dir data/exp3 --output_dir d
 echo 'DAN';
 python3 src/exp3_embs/get_use_dan_embeddings.py --input_dir data/exp3 --output_dir data/exp3_DAN;
 echo 'infersent';
-# TODO: python3 src/exp3_embs/get_infersent_embeddings.py --input_dir data/exp3 --output_dir data/exp3_infersent;
+python3 src/exp3_embs/get_infersent_embeddings.py --input_dir data/exp3 --output_dir data/exp3_infersent;
 deactivate;
 
 source $VENV2_ACTIVATION;
@@ -64,14 +64,14 @@ done;
 echo '2b. patch, merge and sort everything.';
 for EMB_ARCH in USE DAN infersent skipthoughts randlstm randtf; do
   echo "sort ${EMB_ARCH} output JSONs";
-  python3 src/shared/merge.py --sort $(find data/embs_exp3/${EMB_ARCH} -type f -name '*.json') --key_meanings ${EMB_ARCH}
+  python3 src/shared/merge.py --sort $(find data/embs_exp3/${EMB_ARCH} -type f -name '*.json') --key_meanings ${EMB_ARCH};
 done;
-mkdir -p results/exp3
+mkdir -p results/exp3;
 for RUN in $(seq 1 5); do
   echo "merge all results for run ${RUN}";
-  python3 src/shared/merge.py --merge $(find data/embs_exp3/ -type f -name '*.json' | grep ${RUN}) --merged_file results/exp3/${RUN}.json
+  python3 src/shared/merge.py --merge $(find data/embs_exp3/ -type f -name '*.json' | grep ${RUN}) --merged_file results/exp3/${RUN}.json;
 
 echo '3. compute Mantel tests';
-python3 src/shared/compute_mantels_per_dir.py --input_dir results/exp3 --output exp3-results-mantels.txt
+python3 src/shared/compute_mantels_per_dir.py --input_dir results/exp3 --output exp3-results-mantels.txt;
 
 deactivate;

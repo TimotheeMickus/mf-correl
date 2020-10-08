@@ -18,7 +18,7 @@ def load_SICK(filepath):
 	return data, vocab
 
 def get_infersent_embs(filepath, vocab):
-	from InferSent.models import InferSent
+	from exp3_embs.InferSent.models import InferSent
 	model_version = 1
 	MODEL_PATH = "InferSent/encoder/infersent%s.pkl" % model_version
 	params_model = {'bsize': 64, 'word_emb_dim': 300, 'enc_lstm_dim': 2048,
