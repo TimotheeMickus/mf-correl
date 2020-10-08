@@ -79,6 +79,7 @@ mkdir -p results/exp3;
 for RUN in $(seq 1 5); do
   echo "merge all results for run ${RUN}";
   python3 src/shared/merge.py --merge $(find data/embs_exp3/ -type f -name '*.json' | grep ${RUN}) --merged_file results/exp3/${RUN}.json;
+done;
 
 echo '3. compute Mantel tests';
 python3 src/shared/compute_mantels_per_dir.py --input_dir results/exp3 --output exp3-results-mantels.txt;
