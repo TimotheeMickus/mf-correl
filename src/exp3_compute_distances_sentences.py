@@ -44,7 +44,22 @@ def default_synonym(word):
 	return cands[0].lemma_names()[0]
 
 
-def pair_to_json(pair,
+def meaning_pair_to_json(pair):
+	# unpack
+	(i1, (s1, v1)), (i2, (s2, v2)) = pair
+
+	# meaning only
+	meaning_scores = {"l2":l2(v1, v2), "cdist":cdist(v1, v2)}
+
+	jdict = {
+		"idx": [i1, i2],
+		#"sentences":[s1,s2], #useful for debugging, but eats up a lot of space.
+		"meaning_scores":meaning_scores,
+		"text_scores":{},
+	}
+	return json.dumps(jdict)
+
+def full_pair_to_json(pair,
 	w2c = collections.defaultdict(itertools.count().__next__),
 	control_synonyms=True,
 	stops=spacy.lang.en.stop_words.STOP_WORDS | {'d', 's', "'", 're', 've', 'll', 'm'} | set(string.punctuation)):
@@ -52,7 +67,7 @@ def pair_to_json(pair,
 	(i1, (s1, v1)), (i2, (s2, v2)) = pair
 
 	# meaning scores
-	meaning_scores = {"l2-USE":l2(v1, v2), "cdist-USE":cdist(v1, v2)}
+	meaning_scores = {"l2":l2(v1, v2), "cdist":cdist(v1, v2)}
 
 	# text scores: preproc
 	# convert sentences to reps
@@ -86,7 +101,7 @@ def pair_to_json(pair,
 	# return
 	jdict = {
 		"idx": [i1, i2],
-		"sentences":[s1,s2],
+		#"sentences":[s1,s2], #useful for debugging, but eats up a lot of space.
 		"meaning_scores":meaning_scores,
 		"text_scores":text_scores,
 	}
@@ -100,12 +115,15 @@ if __name__=="__main__":
 		Produces one JSON per sentence pair.""")
 	p.add_argument("--input", type=str, help="input file", required=True)
 	p.add_argument("--output", type=str, help="output file", default="output.json")
+	p.add_argument("--meaning_only", action="store_true", help="only meaning distances")
 	args = p.parse_args()
 
 	sample = make_pairs(read_tsv(args.input))
 
+	pairing_func = meaning_pair_to_json if args.meaning_only else full_pair_to_json
+
 	with open(args.output, "w") as ostr, multiprocessing.Pool(multiprocessing.cpu_count()) as pool:
-		for jstring in tqdm.tqdm(pool.imap_unordered(pair_to_json, sample, 200), total=(4123 * 4122) // 2):
+		for jstring in tqdm.tqdm(pool.imap_unordered(pairing_func, sample, 200), total=(4123 * 4122) // 2):
 			print(jstring, file=ostr)
 	pool.close()
 	pool.join()

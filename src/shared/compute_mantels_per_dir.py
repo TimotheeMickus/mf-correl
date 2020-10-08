@@ -36,8 +36,8 @@ if __name__=="__main__":
 	print(datetime.datetime.now(), "process start")
 	input_files = (
 		os.path.join(root, filename)
-		for root, _, filenames in os.walk(args.input_dir) 
-		for filename in filenames 
+		for root, _, filenames in os.walk(args.input_dir)
+		for filename in filenames
 		if filename.endswith(".json")
 	)
 
@@ -45,7 +45,7 @@ if __name__=="__main__":
 	def get_config(mscores=[], tscores=[], method="spearman"):
 		for input_file in sorted(input_files):
 			ex = next(get_raw_data(input_file))
-			#print(datetime.datetime.now(), "handling file %s" % input_file) 
+			#print(datetime.datetime.now(), "handling file %s" % input_file)
 			for meaning_distance in mscores or ex['meaning_scores']:
 				for form_distance in tscores or ex['text_scores']:
 					yield meaning_distance, form_distance, input_file, method
@@ -55,8 +55,7 @@ if __name__=="__main__":
 		for mantel_result, config in pl.imap_unordered(mantel_from_config, configs):
 			print(datetime.datetime.now(), *config, *mantel_result)
 			print(*config, *mantel_result, sep="\t", file=ostr)
-	
-	
+
+
 	pl.close()
 	pl.join()
-

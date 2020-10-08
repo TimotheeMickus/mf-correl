@@ -1,16 +1,20 @@
 import json
 import operator
 
-def get_raw_data(filename, drop={}):
+def get_raw_data(filename, drop={}, key_meanings=None):
 	with open(filename) as istr:
 		for j in map(json.loads, istr):
 			#j['idx'] = list(map(int, j['idx']))
 			for key in drop:
 				del j[key]
+			if key_meanings and "meaning_scores" in j:
+				for ms in list(j["meaning_scores"].keys()):
+					j["%s-%s" % (ms, key_meanings)] = j[ms]
+					del j[ms]
 			yield j
 
-def sort_file(filename, drop={}):
-	data = sorted(get_raw_data(filename, drop=drop), key=lambda j:j["idx"])
+def sort_file(filename, drop={}, key_meanings=None):
+	data = sorted(get_raw_data(filename, drop=drop, key_meanings=key_meanings), key=lambda j:j["idx"])
 	with open(filename, "w") as ostr:
 		for j in map(json.dumps, data):
 			print(j, file=ostr)
@@ -34,7 +38,7 @@ def merge(output_file, *files):
 				text_scores.update(j_dict.get("text_scores", {}))
 
 			merged_j = {
-				"idx":jdicts[0]["idx"], 
+				"idx":jdicts[0]["idx"],
 				"meaning_scores":meaning_scores,
 				"text_scores":text_scores,
 			}
@@ -62,7 +66,7 @@ def merge_meanings_and_texts(output_file, meaning_file, text_file):
 			text_scores = jdict_t["text_scores"]
 
 			merged_j = {
-				"idx":jdict_m["idx"], 
+				"idx":jdict_m["idx"],
 				"meaning_scores":meaning_scores,
 				"text_scores":text_scores,
 			}
@@ -77,13 +81,14 @@ if __name__=="__main__":
 	parser.add_argument("--drop", nargs="+", type=str, default=[])
 	parser.add_argument("--merge", nargs="+", type=str, default=[])
 	parser.add_argument("--merge2", nargs="+", type=str, default=[])
+	parser.add_argument("--key_meanings", type=str, default=None)
 	parser.add_argument("--meanings_from", type=str, default=None)
 	parser.add_argument("--texts_from", type=str, default=None)
 	parser.add_argument("--merged_file", type=str, default="merged.json")
 	args = parser.parse_args()
 	for filename in args.sort:
 		print(datetime.datetime.now(), "handling %s" % filename)
-		sort_file(filename, drop=args.drop)
+		sort_file(filename, drop=args.drop, key=args.key_meanings)
 	if args.meanings_from and args.texts_from:
 		merge_meanings_and_texts(args.merged_file, args.meanings_from, args.texts_from)
 	elif args.merge:

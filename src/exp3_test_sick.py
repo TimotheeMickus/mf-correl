@@ -4,12 +4,10 @@ import numpy as np
 import scipy.stats
 import torch
 
-PATH_TO_SICK = "../data/SICK/SICK.txt"
-
 def cdist(v_a, v_b):
 	return 1 - (v_a.dot(v_b)) / (np.linalg.norm(v_a) * np.linalg.norm(v_b))
 
-def load_SICK(filepath=PATH_TO_SICK):
+def load_SICK(filepath):
 	with open(filepath) as istr:
 		_ = next(istr)
 		data = map(str.strip, istr)
@@ -130,16 +128,19 @@ if __name__ == "__main__":
 	import argparse
 	p = argparse.ArgumentParser("Compute results on SICK for one set of embeddings")
 	p.add_argument("--emb_path", type=str, help="input embeddings to test", required=False)
-	p.add_argument("--emb_arch", type=str, help="input embeddings architecture", required=True, choices=["infersent", "USE-DAN", "USE-Tf", "skipthought", "randlstm", "randtf", "randembs"])
+	p.add_argument("--emb_arch", type=str, help="input embeddings architecture", required=True,
+		choices=["infersent", "DAN", "USE", "skipthoughts", "randlstm", "randtf", "randembs"])
+	p.add_argument("--sick_path", type=str, help="path to SICK.txt", required=True)
+
 	args = p.parse_args()
 
-	data, vocab = load_SICK()
+	data, vocab = load_SICK(args.sick_path)
 
 	load_func = {
 		"infersent":get_infersent_embs,
-		"USE-DAN":get_USE_DAN_embs,
-		"USE-Tf":get_USE_Tf_embs,
-		"skipthought":get_skipthought_embs,
+		"DAN":get_USE_DAN_embs,
+		"USE":get_USE_Tf_embs,
+		"skipthoughts":get_skipthought_embs,
 		"randlstm":get_randlstm_emb,
 		"randtf":get_randtf_emb,
 		"randembs":get_rand_emb,
