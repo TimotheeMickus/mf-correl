@@ -45,3 +45,9 @@ unzip embs/glove.840B.300d.zip -d embs/
 mkdir encoder
 wget -P encoder https://dl.fbaipublicfiles.com/infersent/infersent1.pkl
 cd ../../..
+
+echo '3. Evaluation data'
+wget -P data/ https://staff.fnwi.uva.nl/e.bruni/resources/MEN.zip
+unzip -d data data/MEN.zip
+wget -P data/ https://zenodo.org/record/2787612/files/SICK.zip
+unzip -d data/SICK data/SICK.zip
