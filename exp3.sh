@@ -2,7 +2,7 @@
 
 echo '0. set up: activate virtual env, create required directories';
 
-VENV3_ACTIVATION=.venv/bin/activate;
+VENV3_ACTIVATION=.venv3/bin/activate;
 VENV2_ACTIVATION=.venv2/bin/activate;
 
 source $VENV3_ACTIVATION;

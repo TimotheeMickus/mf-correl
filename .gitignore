@@ -1,7 +1,6 @@
 __pycache__/
-.venv/
+.venv3/
 .venv2/
-venv/
 **/*.pkl
 **/*.zip
 data/SICK/
