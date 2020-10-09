@@ -33,7 +33,7 @@ wget http://www.cs.toronto.edu/~rkiros/models/uni_skip.npz.pkl
 wget http://www.cs.toronto.edu/~rkiros/models/bi_skip.npz
 wget http://www.cs.toronto.edu/~rkiros/models/bi_skip.npz.pkl
 cd ..
-sed -i 's#/u/rkiros/public_html/models/#os.path.join(os.path.dirname(__file__), "models/")#g' skipthoughts.py
+sed -i "s#'/u/rkiros/public_html/models/''#os.path.join(os.path.dirname(__file__), 'models/')#g" skipthoughts.py
 cd ../../..
 
 echo "2c. FB's InferSent"
