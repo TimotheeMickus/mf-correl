@@ -131,6 +131,7 @@ if __name__ == "__main__":
 	p.add_argument("--emb_arch", type=str, help="input embeddings architecture", required=True,
 		choices=["infersent", "DAN", "USE", "skipthoughts", "randlstm", "randtf", "randembs"])
 	p.add_argument("--sick_path", type=str, help="path to SICK.txt", required=True)
+	p.add_argument("--output_file", type=str, help="path to output", required=True)
 
 	args = p.parse_args()
 
@@ -156,5 +157,6 @@ if __name__ == "__main__":
 	pr_l2, pp_l2 = scipy.stats.pearsonr(l2_seq, targets)
 	sr_cd, sp_cd = scipy.stats.spearmanr(cdist_seq, targets)
 	pr_cd, pp_cd = scipy.stats.pearsonr(cdist_seq, targets)
-	print("l2: spearman:", sr_l2, sp_l2, ", pearson:", pr_l2, pp_l2)
-	print("cdist: spearman:", sr_cd, sp_cd, ", pearson:", pr_cd, pp_cd)
+	with open(args.output_file, "w") as ostr:
+		print("l2: spearman:", sr_l2, sp_l2, ", pearson:", pr_l2, pp_l2, file=ostr)
+		print("cdist: spearman:", sr_cd, sp_cd, ", pearson:", pr_cd, pp_cd, file=ostr)
