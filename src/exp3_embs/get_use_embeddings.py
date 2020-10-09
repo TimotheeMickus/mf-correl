@@ -1,15 +1,4 @@
 if __name__=="__main__":
-
-	import warnings
-	warnings.simplefilter(action='ignore', category=FutureWarning)
-
-	import os
-	os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
-	import sys
-	import logging
-	logging.disable(sys.maxsize)
-
 	import argparse
 	import tensorflow as tf
 	import tensorflow_hub as hub
