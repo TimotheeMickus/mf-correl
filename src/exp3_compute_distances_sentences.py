@@ -1,5 +1,5 @@
 # TODO: fix imports.
-from shared.distances import levenshtein, levenshtein_normalised
+from shared.distances import levenshtein, levenshtein_normalised, l2, cdist
 
 import csv
 import string
