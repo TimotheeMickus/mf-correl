@@ -72,6 +72,7 @@ def get_skipthought_embs(filepath, vocab):
 
 # fix for pickle
 def get_random_embedding():
+	import torch
 	return torch.randn(1, 512)
 
 def get_randlstm_emb(filepath, vocab):
