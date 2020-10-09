@@ -31,7 +31,7 @@ if __name__=="__main__":
 		init_op = tf.group([tf.global_variables_initializer(), tf.tables_initializer()])
 		session.run(init_op)
 		for file_name in files:
-			with open(file_name % i) as istr:
+			with open(file_name) as istr:
 				data = map(str.strip, istr)
 				data = list(data)
 			message_embeddings = model(data).eval()
