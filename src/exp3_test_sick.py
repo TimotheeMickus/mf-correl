@@ -18,14 +18,16 @@ def load_SICK(filepath):
 	return data, vocab
 
 def get_infersent_embs(filepath, vocab):
+	import torch
+	import pathlib
 	from exp3_embs.InferSent.models import InferSent
-	model_version = 1
-	MODEL_PATH = "InferSent/encoder/infersent%s.pkl" % model_version
+	is_dir = pathlib.Path(__file__).parent / "exp3_embs" / "InferSent"
+	MODEL_PATH = str(is_dir / "encoder" / "infersent1.pkl")
 	params_model = {'bsize': 64, 'word_emb_dim': 300, 'enc_lstm_dim': 2048,
-		        'pool_type': 'max', 'dpout_model': 0.0, 'version': model_version}
+		        'pool_type': 'max', 'dpout_model': 0.0, 'version': 1}
 	model = InferSent(params_model)
 	model.load_state_dict(torch.load(MODEL_PATH))
-	W2V_PATH = 'embs/glove-840B/glove.840B.300d.txt'
+	W2V_PATH = str(is_dir / "embs" / "glove.840B.300d.txt")
 	model.set_w2v_path(W2V_PATH)
 	model.build_vocab_k_words(K=100000)
 	vocab = list(vocab)
@@ -57,9 +59,12 @@ def _get_USE_embs(filepath, vocab, module_url):
 	return embs
 
 def get_skipthought_embs(filepath, vocab):
-	from exp3_embs.skip_thoughts import skipthoughts
-	model = skipthoughts.load_model()
-	encoder = skipthoughts.Encoder(model)
+	#import exp3_embs
+	#import exp3_embs.skip_thoughts
+	#import exp3_embs.skip_thoughts.skipthoughts
+	from exp3_embs.skip_thoughts.skipthoughts import load_model, Encoder
+	model = load_model()
+	encoder = Encoder(model)
 	vocab = list(vocab)
 	vectors = encoder.encode(vocab)
 	embs = dict(zip(vocab, np.array(vectors)))
@@ -70,7 +75,7 @@ def get_random_embedding():
 	return torch.randn(1, 512)
 
 def get_randlstm_emb(filepath, vocab):
-	from exp3_embs.get_randlstm_embs import get_random_embedding
+	from exp3_embs.get_randlstm_embeddings import get_random_embedding
 	import pickle
 	import torch
 	with open(filepath, "rb") as istr:
@@ -86,7 +91,7 @@ def get_randlstm_emb(filepath, vocab):
 	return embs
 
 def get_randtf_emb(filepath, vocab):
-	from exp3_embs.get_randtf_embs import get_random_embedding
+	from exp3_embs.get_randtf_embeddings import get_random_embedding
 	import pickle
 	import math
 	import torch
@@ -111,7 +116,7 @@ def get_randtf_emb(filepath, vocab):
 	return embs
 
 def get_rand_emb(filepath, vocab):
-	from exp3_embs.get_rand_embs import get_random_embedding
+	from exp3_embs.get_rand_embeddings import get_random_embedding
 	import pickle
 	with open(filepath, "rb") as istr:
 		embedding_maker = pickle.load(istr)
