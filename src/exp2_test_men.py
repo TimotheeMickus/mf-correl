@@ -49,6 +49,7 @@ if __name__ == "__main__":
 	p.add_argument("--is_fasttext", action="store_true")
 	p.add_argument("--is_binary", action="store_true")
 	p.add_argument("--men_path", type=str, required=True)
+	p.add_argument("--output_file", type=str, required=True)
 	args = p.parse_args()
 
 	data, vocab = load_MEN(args.men_path)
@@ -61,5 +62,6 @@ if __name__ == "__main__":
 	l2_seq = get_l2_seq(embs, men_pairs)
 	cdist_seq = get_cdist_seq(embs, men_pairs)
 
-	print("l2: spearman:", *scipy.stats.spearmanr(l2_seq, targets), ", pearson:", *scipy.stats.pearsonr(l2_seq, targets))
-	print("cdist: spearman:", *scipy.stats.spearmanr(cdist_seq, targets), ", pearson:", *scipy.stats.pearsonr(cdist_seq, targets))
+	with open(args.output_file, "w") as ostr:
+		print("l2: spearman:", *scipy.stats.spearmanr(l2_seq, targets), ", pearson:", *scipy.stats.pearsonr(l2_seq, targets), file=ostr)
+		print("cdist: spearman:", *scipy.stats.spearmanr(cdist_seq, targets), ", pearson:", *scipy.stats.pearsonr(cdist_seq, targets), file=ostr)
