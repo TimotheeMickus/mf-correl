@@ -8,9 +8,11 @@ def get_raw_data(filename, drop={}, key_meanings=None):
 			for key in drop:
 				del j[key]
 			if key_meanings and "meaning_scores" in j:
-				for ms in list(j["meaning_scores"].keys()):
-					j["%s-%s" % (ms, key_meanings)] = j[ms]
-					del j[ms]
+				keys = list(j["meaning_scores"].keys())
+				for ms in keys:
+					j["meaning_scores"]["%s-%s" % (ms, key_meanings)] = j["meaning_scores"][ms]
+				for ms in keys:
+					del j["meaning_scores"][ms]
 			yield j
 
 def sort_file(filename, drop={}, key_meanings=None):
@@ -88,7 +90,7 @@ if __name__=="__main__":
 	args = parser.parse_args()
 	for filename in args.sort:
 		print(datetime.datetime.now(), "handling %s" % filename)
-		sort_file(filename, drop=args.drop, key=args.key_meanings)
+		sort_file(filename, drop=args.drop, key_meanings=args.key_meanings)
 	if args.meanings_from and args.texts_from:
 		merge_meanings_and_texts(args.merged_file, args.meanings_from, args.texts_from)
 	elif args.merge:
