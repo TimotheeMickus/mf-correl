@@ -59,16 +59,16 @@ echo '2a. compute distances';
 EMB_ARCH='USE';
 echo ${EMB_ARCH};
 for EMB_FILE in $(find data/embs_exp3/${EMB_ARCH} -type f -name '*.emb.tsv'); do
-  echo ${EMB_FILE};
   OUTPUT_FILE="${EMB_FILE%.emb.tsv}.json";
+  echo "${EMB_FILE} to ${OUTPUT_FILE}";
   python3 src/exp3_compute_distances_sentences.py --input $EMB_FILE --output ${OUTPUT_FILE};
 done
 
 for EMB_ARCH in DAN infersent skipthoughts randlstm randtf; do
   echo ${EMB_ARCH};
   for EMB_FILE in $(find data/embs_exp3/${EMB_ARCH} -type f -name '*.emb.tsv'); do
-    echo ${EMB_FILE};
-    OUTPUT_FILE={EMB_FILE%.emb.tsv}.json;
+    OUTPUT_FILE="${EMB_FILE%.emb.tsv}.json";
+    echo "${EMB_FILE} to ${OUTPUT_FILE}";
     python3 src/exp3_compute_distances_sentences.py --input $EMB_FILE --output ${OUTPUT_FILE} --meaning_only;
   done
 done;
