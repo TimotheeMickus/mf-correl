@@ -79,13 +79,13 @@ if __name__=="__main__":
 	import argparse
 	import datetime
 	parser = argparse.ArgumentParser("Utility script for merging different JSON distance files")
-	parser.add_argument("--sort", nargs="+", type=str, default=[])
-	parser.add_argument("--drop", nargs="+", type=str, default=[])
-	parser.add_argument("--merge", nargs="+", type=str, default=[])
-	parser.add_argument("--merge2", nargs="+", type=str, default=[])
-	parser.add_argument("--key_meanings", type=str, default=None)
-	parser.add_argument("--meanings_from", type=str, default=None)
-	parser.add_argument("--texts_from", type=str, default=None)
+	parser.add_argument("--sort", nargs="+", type=str, default=[], help="sort inplace a list of distance JSON files (according to pair index)")
+	parser.add_argument("--key_meanings", type=str, default=None, help="append this str to meaning scores keys when sorting")
+	parser.add_argument("--drop", nargs="+", type=str, default=[], help="drop these keys from JSON when sorting")
+	parser.add_argument("--merge", nargs="+", type=str, default=[], help="merge a list of distance JSON files into a single file")
+	parser.add_argument("--merge2", nargs="+", type=str, default=[], help="merge exactly two files, get all distances from the first, add only meanings from the second")
+	parser.add_argument("--meanings_from", type=str, default=None, help="merge by taking text scores from this file")
+	parser.add_argument("--texts_from", type=str, default=None, help="merge by taking meaning scores scores from this file")
 	parser.add_argument("--merged_file", type=str, default="merged.json")
 	args = parser.parse_args()
 	for filename in args.sort:
@@ -94,6 +94,8 @@ if __name__=="__main__":
 	if args.meanings_from and args.texts_from:
 		merge_meanings_and_texts(args.merged_file, args.meanings_from, args.texts_from)
 	elif args.merge:
+		print(datetime.datetime.now(), "handling files", *args.merge)
 		merge(args.merged_file, *args.merge)
 	elif args.merge2:
+		print(datetime.datetime.now(), "handling files", *args.merge2)
 		merge2(args.merged_file, *args.merge2)
