@@ -18,4 +18,4 @@ InferSent/
 
 # files produced by experiments
 data/embs_exp3/
-results/
+data/results_exp3/

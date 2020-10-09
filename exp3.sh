@@ -78,13 +78,13 @@ for EMB_ARCH in USE DAN infersent skipthoughts randlstm randtf; do
   python3 src/shared/merge.py --sort $(find data/embs_exp3/${EMB_ARCH} -type f -name '*.json') --key_meanings ${EMB_ARCH};
 done;
 # merge results per run
-mkdir -p results/exp3;
+mkdir -p data/results_exp3;
 for RUN in $(seq 1 5); do
   echo "merge all results for run ${RUN}";
-  python3 src/shared/merge.py --merge $(find data/embs_exp3/ -type f -name "run-${RUN}.json" ) --merged_file results/exp3/${RUN}.json;
+  python3 src/shared/merge.py --merge $(find data/embs_exp3/ -type f -name "run-${RUN}.json" ) --merged_file data/results_exp3/${RUN}.json;
 done;
 
 echo '3. compute Mantel tests';
-python3 src/shared/compute_mantels_per_dir.py --input_dir results/exp3 --output exp3-results-mantels.txt;
+python3 src/shared/compute_mantels_per_dir.py --input_dir data/results_exp3 --output exp3-results-mantels.txt;
 
 deactivate;
