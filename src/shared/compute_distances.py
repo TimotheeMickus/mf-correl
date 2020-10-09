@@ -1,5 +1,4 @@
-# TODO: fix imports.
-from shared.distances import levenshtein, levenshtein_normalised, l2, cdist
+from distances import levenshtein, levenshtein_normalised, l2, cdist, jaccard
 
 import csv
 import string
@@ -44,30 +43,23 @@ def default_synonym(word):
 	return cands[0].lemma_names()[0]
 
 
-def meaning_pair_to_json(pair):
-	# unpack
-	(i1, (s1, v1)), (i2, (s2, v2)) = pair
-
-	# meaning only
-	meaning_scores = {"l2":l2(v1, v2), "cdist":cdist(v1, v2)}
-
-	jdict = {
-		"idx": [i1, i2],
-		#"sentences":[s1,s2], #useful for debugging, but eats up a lot of space.
-		"meaning_scores":meaning_scores,
-		"text_scores":{},
-	}
-	return json.dumps(jdict)
-
 def full_pair_to_json(pair,
-	w2c = collections.defaultdict(itertools.count().__next__),
-	control_synonyms=True,
+	w2c=collections.defaultdict(itertools.count().__next__),
+	control_synonyms=True, meanings_only=False,	include_jaccard=True,
 	stops=spacy.lang.en.stop_words.STOP_WORDS | {'d', 's', "'", 're', 've', 'll', 'm'} | set(string.punctuation)):
 	# unpack
 	(i1, (s1, v1)), (i2, (s2, v2)) = pair
 
 	# meaning scores
 	meaning_scores = {"l2":l2(v1, v2), "cdist":cdist(v1, v2)}
+	if meanings_only:
+		jdict = {
+			"idx": [i1, i2],
+			#"sentences":[s1,s2], #useful for debugging, but eats up a lot of space.
+			"meaning_scores":meaning_scores,
+			"text_scores":{},
+		}
+		return json.dumps(jdict)
 
 	# text scores: preproc
 	# convert sentences to reps
@@ -78,13 +70,16 @@ def full_pair_to_json(pair,
 
 	# text scores
 	text_scores = {
-		#"jaccard_score":jaccard(c1, c2),
-		#"jaccard_f_score":jaccard(c1_f, c2_f),
 		"levenshtein_score":levenshtein(c1, c2),
 		"levenshtein_n_score":levenshtein_normalised(c1, c2),
 		"levenshtein_f_score":levenshtein(c1_f, c2_f),
 		"levenshtein_fn_score":levenshtein_normalised(c1_f, c2_f),
 	}
+	if include_jaccard:
+		text_scores.update({
+			"jaccard_score":jaccard(c1, c2),
+			"jaccard_f_score":jaccard(c1_f, c2_f),
+		})
 	if control_synonyms:
 		syn_s1 = list(map(default_synonym, s1))
 		syn_s2 = list(map(default_synonym, s2))
@@ -97,6 +92,11 @@ def full_pair_to_json(pair,
 			"levenshtein_syn_f_score":levenshtein(syn_c1_f, syn_c2_f),
 			"levenshtein_syn_fn_score":levenshtein_normalised(syn_c1_f, syn_c2_f),
 		})
+		if include_jaccard:
+			text_scores.update({
+				"jaccard_syn_score":jaccard(syn_c1, syn_c2),
+				"jaccard_syn_f_score":jaccard(syn_c1_f, syn_c2_f),
+			})
 
 	# return
 	jdict = {
@@ -108,19 +108,51 @@ def full_pair_to_json(pair,
 	return json.dumps(jdict)
 
 
+# specific pairwise distance functions
+def meaning_only(pair):
+	return full_pair_to_json(pair, meanings_only=True)
+
+
+def no_jaccard(pair):
+	return full_pair_to_json(pair, include_jaccard=False)
+
+
+def no_synonyms(pair):
+	return full_pair_to_json(pair, control_synonyms=False)
+
+
+def no_synonyms_no_jaccard(pair):
+	return full_pair_to_json(pair, control_synonyms=False, include_jaccard=False)
+
+
 if __name__=="__main__":
 	import argparse
+
 	p = argparse.ArgumentParser("""Computing distances for sentences pairs.
 		Takes as input sentence embedding + tokenized sentence TSV (see embs/).
 		Produces one JSON per sentence pair.""")
 	p.add_argument("--input", type=str, help="input file", required=True)
 	p.add_argument("--output", type=str, help="output file", default="output.json")
 	p.add_argument("--meaning_only", action="store_true", help="only meaning distances")
+	p.add_argument("--no_jaccard", action="store_true", help="don't compute jaccard distances")
+	p.add_argument("--no_synonyms", action="store_true", help="don't control for synonymy")
+
 	args = p.parse_args()
 
 	sample = make_pairs(read_tsv(args.input))
 
-	pairing_func = meaning_pair_to_json if args.meaning_only else full_pair_to_json
+	pairing_func = None
+	if args.meaning_only:
+		pairing_func = meaning_only
+	elif args.no_jaccard:
+		if args.no_synonyms:
+			pairing_func = no_synonyms_no_jaccard
+		else:
+			pairing_func = no_jaccard
+	elif args.no_synonyms:
+		pairing_func = no_synonyms
+	else:
+		pairing_func = full_pair_to_json
 
 	with open(args.output, "w") as ostr, multiprocessing.Pool(multiprocessing.cpu_count()) as pool:
 		for jstring in tqdm.tqdm(pool.imap_unordered(pairing_func, sample, 200), total=(4123 * 4122) // 2):

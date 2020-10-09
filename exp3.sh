@@ -10,7 +10,7 @@ source $VENV3_ACTIVATION;
 for EMB_ARCH in USE DAN infersent skipthoughts randlstm randtf; do
   mkdir -p data/embs_exp3/${EMB_ARCH};
 done;
-mkdir -p data/results_exp3/mantels data/results_exp3/sick data/results_exp3/dist;
+mkdir -p data/results_exp3/mantels data/results_exp3/sick data/results_exp3/dists;
 
 
 echo -e '\e[41m\e[1m 1a. compute sentence embeddings \e[0m';
@@ -62,15 +62,15 @@ echo -e "\e[41m\e[1m ${EMB_ARCH} \e[0m";
 for EMB_FILE in $(find data/embs_exp3/${EMB_ARCH} -type f -name '*.emb.tsv'); do
   OUTPUT_FILE="${EMB_FILE%.emb.tsv}.json";
   echo -e "\e[41m\e[1m ${EMB_FILE} to ${OUTPUT_FILE} \e[0m";
-  python3 src/exp3_compute_distances_sentences.py --input $EMB_FILE --output ${OUTPUT_FILE};
+  python3 src/shared/compute_distances.py --input $EMB_FILE --output ${OUTPUT_FILE} --no_jaccard;
 done
 
 for EMB_ARCH in DAN infersent skipthoughts randlstm randtf; do
   echo -e "\e[41m\e[1m ${EMB_ARCH} \e[0m";
   for EMB_FILE in $(find data/embs_exp3/${EMB_ARCH} -type f -name '*.emb.tsv'); do
     OUTPUT_FILE="${EMB_FILE%.emb.tsv}.json";
-    echo -e "\e[41m\e[1m ${EMB_FILE} to ${OUTPUT_FILE} \e[0m";
-    python3 src/exp3_compute_distances_sentences.py --input $EMB_FILE --output ${OUTPUT_FILE} --meaning_only;
+    echo -e "\e[41m\e[1m ${EMB_FILE} => ${OUTPUT_FILE} \e[0m";
+    python3 src/shared/compute_distances.py --input $EMB_FILE --output ${OUTPUT_FILE} --meaning_only;
   done
 done;
 
