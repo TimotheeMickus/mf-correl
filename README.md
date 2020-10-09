@@ -20,10 +20,8 @@ Data is available under `data/`, subdirectories correspond to different experime
 
 We used Mantel tests are from J. W. Carr's github ([see here](https://github.com/jwcarr/MantelTest)).
 
-The implementation of APTED by Pawlik & Augsten is from their original [repository](https://github.com/DatabaseGroup/apted) (written in Java). The JAR we provide has been hacked to accept a file of pairs of trees at once, instead of a single pair; calls should resemble something like:
-````{.sh}
-java -jar apted.jar trees.tsv
-````
+The implementation of APTED by Pawlik & Augsten is from their original [repository](https://github.com/DatabaseGroup/apted) (written in Java).
+The JAR we provide has been hacked to accept a file of pairs of trees at once, instead of a single pair.
 The single edited Java file is available for reference in the directory `shared/apted/`.
 
 Pre-trained word embeddings are available from their original repositories, or at these links: [Word2Vec](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing), [GloVe 6B](http://nlp.stanford.edu/data/glove.6B.zip) and [840B](http://nlp.stanford.edu/data/glove.840B.300d.zip), [FastText](https://dl.fbaipublicfiles.com/fasttext/vectors-wiki/wiki.en.zip)

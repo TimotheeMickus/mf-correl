@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import numpy as np
 import scipy.stats
-import torch
+ #import torch
 
 def cdist(v_a, v_b):
 	return 1 - (v_a.dot(v_b)) / (np.linalg.norm(v_a) * np.linalg.norm(v_b))

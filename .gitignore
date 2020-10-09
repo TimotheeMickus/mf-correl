@@ -15,3 +15,7 @@ data/MEN/
 skip_thoughts/
 MantelTest/
 InferSent/
+
+# files produced by experiments
+data/embs_exp3/
+results/
