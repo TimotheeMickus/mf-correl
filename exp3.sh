@@ -22,15 +22,15 @@ deactivate;
 
 source $VENV2_ACTIVATION;
 echo 'skipthoughts';
-python2 src/exp3_embs/get_skipthoughts_embs.py --input_dir data/exp3 --output_dir data/embs_exp3/skipthoughts;
+python2 src/exp3_embs/get_skipthoughts_embeddings.py --input_dir data/exp3 --output_dir data/embs_exp3/skipthoughts;
 deactivate;
 
 source $VENV3_ACTIVATION;
 echo '1b. compute random embeddings baselines';
 echo 'randlstm';
-python3 src/exp3_embs/get_randlstm_embs.py --input_dir  data/exp3 --output_dir data/embs_exp3/randlstm --pickle randlstm.pkl;
+python3 src/exp3_embs/get_randlstm_embeddings.py --input_dir  data/exp3 --output_dir data/embs_exp3/randlstm --pickle randlstm.pkl;
 echo 'randtf';
-python3 src/exp3_embs/get_randtf_embs.py --input_dir  data/exp3 --output_dir data/embs_exp3/randtf --pickle randtf.pkl;
+python3 src/exp3_embs/get_randtf_embeddings.py --input_dir  data/exp3 --output_dir data/embs_exp3/randtf --pickle randtf.pkl;
 
 echo '1c. evaluate on SICK';
 SICK_PATH='data/SICK/SICK.txt';
