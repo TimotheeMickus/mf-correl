@@ -30,9 +30,9 @@ def load_fasttext_subset(filepath, vocab):
 def to_tsv(data, output_file, embs):
     with open(output_file, "w") as ostr:
         writer = csv.writer(ostr, delimiter="\t")
-        for word, def in data:
+        for word, sent in data:
             emb_str = " ".join(map(str, embs[word].tolist()))
-            _ = writer.writerow([def, emb_str])
+            _ = writer.writerow([sent, emb_str])
 
 def from_csv(input_file):
     with open(input_file) as istr:

@@ -19,5 +19,6 @@ MantelTest/
 InferSent/
 
 # files produced by experiments
+data/embs_exp2/
 data/embs_exp3/
 data/results_exp3/
