@@ -22,67 +22,46 @@ mkdir -p data/results_exp2/mantels data/results_exp2/men data/results_exp2/dists
 
 
 echo -e '\e[41m\e[1m 1a. retrieve embeddings \e[0m';
-echo -e '\e[41m\e[1m Word2Vec \e[0m';
-for FILE in $(find data/exp2/csv/unique-definiendum -type f); do
-  RE_FILE="${FILE%.csv}.tsv";
-  OUTPUT_PATH="data/embs_exp2/w2v/base/$(basename $RE_FILE)";
-  #python3 src/exp2_make_embeddings_file.py --input_file $FILE --output_file $OUTPUT_PATH --embs_path ${EMB_W2V} --is_binary;
-done
-for FILE in $(find data/exp2/csv/polysemous-definiendum -type f); do
-  RE_FILE="${FILE%.csv}.tsv";
-  OUTPUT_PATH="data/embs_exp2/w2v/paraphrase/$(basename $RE_FILE)";
-  #python3 src/exp2_make_embeddings_file.py --input_file $FILE --output_file $OUTPUT_PATH --embs_path ${EMB_W2V} --is_binary;
-done
+for SCENARIO in base paraphrase; do
+  echo -e "\e[41m\e[1m ${SCENARIO} \e[0m";
+  echo -e '\e[41m\e[1m Word2Vec \e[0m';
+  for FILE in $(find data/exp2/csv/$SCENARIO -type f); do
+    OUTPUT_FILE="data/embs_exp2/w2v/$SCENARIO/$(basename ${FILE%.csv}.tsv)";
+    python3 src/exp2_make_embeddings_file.py --input_file $FILE --output_file $OUTPUT_FILE --embs_path ${EMB_W2V} --is_binary;
+  done;
 
-echo -e '\e[41m\e[1m FastText \e[0m';
-for FILE in $(find data/exp2/csv/unique-definiendum -type f); do
-  RE_FILE="${FILE%.csv}.tsv";
-  OUTPUT_PATH="data/embs_exp2/ft/base/$(basename $RE_FILE)";
-  python3 src/exp2_make_embeddings_file.py --input_file $FILE --output_file $OUTPUT_PATH --embs_path ${EMB_FT} --is_fasttext;
-done
-for FILE in $(find data/exp2/csv/polysemous-definiendum -type f); do
-  RE_FILE="${FILE%.csv}.tsv";
-  OUTPUT_PATH="data/embs_exp2/ft/paraphrase/$(basename $RE_FILE)";
-  python3 src/exp2_make_embeddings_file.py --input_file $FILE --output_file $OUTPUT_PATH --embs_path ${EMB_FT} --is_fasttext;
-done
+  echo -e '\e[41m\e[1m FastText \e[0m';
+  for FILE in $(find data/exp2/csv/$SCENARIO -type f); do
+    OUTPUT_FILE="data/embs_exp2/ft/$SCENARIO/$(basename ${FILE%.csv}.tsv)";
+    python3 src/exp2_make_embeddings_file.py --input_file $FILE --output_file $OUTPUT_FILE --embs_path ${EMB_FT} --is_fasttext;
+  done;
 
-echo -e '\e[41m\e[1m GloVe 6B \e[0m';
-for FILE in $(find data/exp2/csv/unique-definiendum -type f); do
-  RE_FILE="${FILE%.csv}.tsv";
-  OUTPUT_PATH="data/embs_exp2/gv6/base/$(basename $RE_FILE)";
-  python3 src/exp2_make_embeddings_file.py --input_file $FILE --output_file $OUTPUT_PATH --emb_path ${EMB_GV6};
-done
-for FILE in $(find data/exp2/csv/polysemous-definiendum -type f); do
-  RE_FILE="${FILE%.csv}.tsv";
-  OUTPUT_PATH="data/embs_exp2/gv6/paraphrase/$(basename $RE_FILE)";
-  python3 src/exp2_make_embeddings_file.py --input_file $FILE --output_file $OUTPUT_PATH --emb_path ${EMB_GV6};
-done
+  echo -e '\e[41m\e[1m GloVe 6B \e[0m';
+  for FILE in $(find data/exp2/csv/$SCENARIO -type f); do
+    OUTPUT_FILE="data/embs_exp2/gv6/$SCENARIO/$(basename ${FILE%.csv}.tsv)";
+    python3 src/exp2_make_embeddings_file.py --input_file $FILE --output_file $OUTPUT_FILE --embs_path ${EMB_GV6};
+  done;
 
-echo -e '\e[41m\e[1m GloVe 840B \e[0m';
-for FILE in $(find data/exp2/csv/unique-definiendum -type f); do
-  RE_FILE="${FILE%.csv}.tsv";
-  OUTPUT_PATH="data/embs_exp2/gv840/base/$(basename $RE_FILE)";
-  python3 src/exp2_make_embeddings_file.py --input_file $FILE --output_file $OUTPUT_PATH --emb_path ${EMB_GV840};
-done
-for FILE in $(find data/exp2/csv/polysemous-definiendum -type f); do
-  RE_FILE="${FILE%.csv}.tsv";
-  OUTPUT_PATH="data/embs_exp2/gv840/paraphrase/$(basename $RE_FILE)";
-  python3 src/exp2_make_embeddings_file.py --input_file $FILE --output_file $OUTPUT_PATH --emb_path ${EMB_GV840};
-done
+  echo -e '\e[41m\e[1m GloVe 840B \e[0m';
+  for FILE in $(find data/exp2/csv/$SCENARIO -type f); do
+    OUTPUT_FILE="data/embs_exp2/gv840/$SCENARIO/$(basename ${FILE%.csv}.tsv)";
+    python3 src/exp2_make_embeddings_file.py --input_file $FILE --output_file $OUTPUT_FILE --embs_path ${EMB_GV840};
+  done;
+done;
 
 echo -e '\e[41m\e[1m 1c. evaluate on MEN \e[0m';
 MEN_PATH="data/MEN/MEN_dataset_natural_form_full";
 echo -e '\e[41m\e[1m Word2Vec \e[0m';
-python3 src/exp2_test_men.py --embs ${EMB_W2V} --men_path ${MEN_PATH} --output_file "result_exp2/men/w2v-results-men.txt" --is_binary;
+python3 src/exp2_test_men.py --embs ${EMB_W2V} --men_path ${MEN_PATH} --output_file "data/results_exp2/men/w2v-results-men.txt" --is_binary;
 
 echo -e '\e[41m\e[1m FastText \e[0m';
-python3 src/exp2_test_men.py --embs ${EMB_FT} --men_path ${MEN_PATH} --output_file "result_exp2/men/ft-results-men.txt" --is_fasttext;
+python3 src/exp2_test_men.py --embs ${EMB_FT} --men_path ${MEN_PATH} --output_file "data/results_exp2/men/ft-results-men.txt" --is_fasttext;
 
 echo -e '\e[41m\e[1m GloVe 6B \e[0m';
-python3 src/exp2_test_men.py --embs ${EMB_GV6} --men_path ${MEN_PATH} --output_file "result_exp2/men/gv6-results-men.txt";
+python3 src/exp2_test_men.py --embs ${EMB_GV6} --men_path ${MEN_PATH} --output_file "data/results_exp2/men/gv6-results-men.txt";
 
 echo -e '\e[41m\e[1m GloVe 840B \e[0m';
-python3 src/exp2_test_men.py --embs ${EMB_GV840} --men_path ${MEN_PATH} --output_file "result_exp2/men/gv840-results-men.txt";
+python3 src/exp2_test_men.py --embs ${EMB_GV840} --men_path ${MEN_PATH} --output_file "data/results_exp2/men/gv840-results-men.txt";
 
 
 echo -e '\e[41m\e[1m 2a. compute distances (meaning, Levenshtein & Jaccard) \e[0m';
@@ -105,18 +84,17 @@ for EMB_ARCH in ft gv6 gv840; do
 done;
 
 echo -e '\e[41m\e[1m 2b. compute distances (TED) \e[0m';
-for FILE in $(find data/exp2/csv/unique-definiendum -type f); do
-  RE_FILE="${FILE%.csv}.trees.tsv";
-  OUTPUT_PATH="data/exp2_trees/base/$(basename $RE_FILE)";
-  python3 src/exp2_compute_trees.py --input_file $FILE --output_file $OUTPUT_PATH;
-done;
-for FILE in $(find data/exp2/csv/polysemous-definiendum -type f); do
-  RE_FILE="${FILE%.csv}.trees.tsv";
-  OUTPUT_PATH="data/exp2_trees/paraphrase/$(basename $RE_FILE)";
-  python3 src/exp2_compute_trees.py --input_file $FILE --output_file $OUTPUT_PATH;
+for SCENARIO in base paraphrase; do
+  echo -e "\e[41m\e[1m ${SCENARIO} \e[0m";
+  for FILE in $(find data/exp2/csv/${SCENARIO} -type f); do
+    OUTPUT_FILE="data/exp2_trees/${SCENARIO}/$(basename ${FILE%.csv}.trees.tsv)";
+    echo -e "\e[41m\e[1m ${FILE} => ${OUTPUT_FILE} \e[0m";
+    python3 src/exp2_compute_trees.py --input_file $FILE --output_file $OUTPUT_FILE;
+  done;
 done;
 for FILE in $(find data/exp2_trees -type f); do
   OUTPUT_FILE="${FILE.tsv}.dists.tsv";
+  echo -e "\e[41m\e[1m ${FILE} => ${OUTPUT_FILE} \e[0m";
   java -jar src/shared/apted/bin/apted.jar $FILE > $OUTPUT_FILE;
 done;
 
