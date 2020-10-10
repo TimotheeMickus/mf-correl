@@ -121,7 +121,7 @@ for RUN in $(seq 1 5); do
 done;
 
 echo -e '\e[33m\e[1m 3. compute Mantel tests \e[0m';
-python3 src/shared/compute_mantels_per_dir.py \
+python3 src/shared/compute_mantels.py \
   --input_dir data/results_exp3/dists/ \
   --output data/results_exp3/mantels/results.txt;
 

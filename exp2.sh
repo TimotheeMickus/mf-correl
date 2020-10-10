@@ -148,7 +148,7 @@ done;
 echo -e '\e[33m\e[1m 3. compute Mantel tests \e[0m';
 for SCENARIO in base paraphrase; do
   echo -e "\e[33m\e[1m ${SCENARIO} \e[0m";
-  python3 src/shared/compute_mantels_per_dir.py \
+  python3 src/shared/compute_mantels.py \
     --input_dir data/results_exp2/dists/${SCENARIO}/ \
     --output data/results_exp2/mantels/results-${SCENARIO}.txt;
 done;
