@@ -35,7 +35,7 @@ gunzip -d data/exp2/embs/ft/cc.en.300.bin.gz
 
 echo '1c. Retrieving GloVe (6B)'
 wget -P data/exp2/embs/gv6/ http://nlp.stanford.edu/data/glove.6B.zip
-unzip -d data/exp2/embs/gv6/ data/exp2/embs/gv840/glove.6B.zip
+unzip -d data/exp2/embs/gv6/ data/exp2/embs/gv6/glove.6B.zip
 
 echo '1d. Retrieving GloVe (840B)'
 wget -P data/exp2/embs/gv840/ http://nlp.stanford.edu/data/glove.840B.300d.zip;
@@ -57,7 +57,7 @@ wget http://www.cs.toronto.edu/~rkiros/models/uni_skip.npz.pkl
 wget http://www.cs.toronto.edu/~rkiros/models/bi_skip.npz
 wget http://www.cs.toronto.edu/~rkiros/models/bi_skip.npz.pkl
 cd ..
-sed -i "s#'/u/rkiros/public_html/models/''#os.path.join(os.path.dirname(__file__), 'models/')#g" skipthoughts.py
+sed -i "s#'/u/rkiros/public_html/models/'#os.path.join(os.path.dirname(__file__), 'models/')#g" skipthoughts.py
 cd ../../..
 
 echo "2c. FB's InferSent"
