@@ -63,7 +63,7 @@ for EMB_FILE in $(find data/embs_exp3/${EMB_ARCH} -type f -name '*.emb.tsv'); do
   OUTPUT_FILE="${EMB_FILE%.emb.tsv}.json";
   echo -e "\e[41m\e[1m ${EMB_FILE} to ${OUTPUT_FILE} \e[0m";
   python3 src/shared/compute_distances.py --input $EMB_FILE --output ${OUTPUT_FILE} --no_jaccard;
-done
+done;
 
 for EMB_ARCH in DAN infersent skipthoughts randlstm randtf; do
   echo -e "\e[41m\e[1m ${EMB_ARCH} \e[0m";
@@ -71,7 +71,7 @@ for EMB_ARCH in DAN infersent skipthoughts randlstm randtf; do
     OUTPUT_FILE="${EMB_FILE%.emb.tsv}.json";
     echo -e "\e[41m\e[1m ${EMB_FILE} => ${OUTPUT_FILE} \e[0m";
     python3 src/shared/compute_distances.py --input $EMB_FILE --output ${OUTPUT_FILE} --meaning_only;
-  done
+  done;
 done;
 
 echo -e '\e[41m\e[1m 2b. patch, merge and sort everything. \e[0m';
