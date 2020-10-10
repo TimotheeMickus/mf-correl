@@ -1,12 +1,12 @@
 # What Meaning-Form Correlation Has to Compose With
 This is the repository for the [COLING 2020](https://coling2020.org/) paper ["What Meaning-Form Correlation Has to Compose With"](nowhere.org/place-holder).
 
-Much assembly required. This repository is a hot mess of monkeypatches held together by off-brand brown tape.
 
 ## Installing
 
 An installation script is available to help you set up all external dependencies as required by the code: [`install.sh`](install.sh)
 The process assumes a UNIX environment and access to functional installs of python 3.7 and python 2 as well as the `virtualenv` tool.
+**The installation script will download all dependencies, which might require significant space.**
 
 ## Structure
 
@@ -14,7 +14,7 @@ Code is stored in `src/`. The `src/shared/` directory contains pieces of code sh
 
 Data is available under `data/`, subdirectories correspond to different experiments.
 
-"Push-button" scripts are available to reproduce experiments: [`exp1.sh`](exp1.sh), [`exp2.sh`](exp2.sh), [`exp3.sh`](exp3.sh).
+"Push-button" scripts are available to reproduce experiments: [`exp1.sh`](exp1.sh), [`exp2.sh`](exp2.sh), [`exp3.sh`](exp3.sh). **Temp files produced for experiments 2 & 3 are quite large (> 50Gb).**
 
 ## Acknowledgments
 
