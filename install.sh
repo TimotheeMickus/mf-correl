@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-echo '1a. Setting up python3 environment'
+echo '0. Setting up virtual environments'
+echo '0a. Setting up python3 environment'
 virtualenv --python=/usr/bin/python3.7 .venv3
 source .venv3/bin/activate
 pip3 install -r pip3.requirements.txt
@@ -9,14 +10,29 @@ python3 -m spacy download en_core_web_sm
 python3 -c "import nltk; nltk.download('wordnet')"
 python3 -c "import nltk; nltk.download('punkt')"
 
-deactivate;
+deactivate
 
-echo '1a. Setting up python2 environment'
+echo '0a. Setting up python2 environment'
 virtualenv --python=/usr/bin/python2 .venv2
 source .venv2/bin/activate
 pip2 install -r pip2.requirements.txt
 
-deactivate;
+deactivate
+
+echo '1. Retrieving word embeddings'
+for ARCH in w2v ft gv6 gv840
+do
+  mkdir -p data/exp2/embs/${ARCH}
+done
+echo '1a. Retrieving word2vec (GoogleNews)'
+gdown https://drive.google.com/u/0/uc?id=0B7XkCwpI5KDYNlNUTTlSS21pQmM;
+gunzip -d GoogleNews-vectors-negative300.bin.gz
+mv mv GoogleNews-vectors-negative300.bin data/exp2/embs/w2v/
+echo '1b. Retrieving fastText (CommonCrawl)'
+echo '1c. Retrieving GloVe (6B)'
+echo '1d. Retrieving GloVe (840B)'
+wget -P data/exp2/embs/gv840/ http://nlp.stanford.edu/data/glove.840B.300d.zip;
+unzip -d data/exp2/embs/gv840/ data/exp2/embs/gv840/glove.840B.300d.zip
 
 echo '2. Download & set up external git repos'
 echo "2a. J. W. Carr's MantelTest"
@@ -38,18 +54,14 @@ cd ../../..
 
 echo "2c. FB's InferSent"
 git clone https://github.com/facebookresearch/InferSent.git src/exp3_embs/InferSent
-cd src/exp3_embs/InferSent;
-mkdir embs
-wget -P embs/ http://nlp.stanford.edu/data/glove.840B.300d.zip
-unzip embs/glove.840B.300d.zip -d embs/
-mkdir encoder
-wget -P encoder https://dl.fbaipublicfiles.com/infersent/infersent1.pkl
-cd ../../..
+ln -s data/exp2/embs/gv840 src/exp3_embs/InferSent/embs
+mkdir src/exp3_embs/InferSent/encoder
+wget -P src/exp3_embs/InferSent/encoder https://dl.fbaipublicfiles.com/infersent/infersent1.pkl
 
 echo '3. Evaluation data'
 echo '3a. Bruni & al. MEN dataset'
 wget -P data/ https://staff.fnwi.uva.nl/e.bruni/resources/MEN.zip
 unzip -d data data/MEN.zip
-echo '3a. Baroni & al. SICK dataset'
+echo '3b. Baroni & al. SICK dataset'
 wget -P data/ https://zenodo.org/record/2787612/files/SICK.zip
 unzip -d data/SICK data/SICK.zip

@@ -11,6 +11,7 @@ __pycache__/
 # external data for evaluation purposes
 data/SICK/
 data/MEN/
+data/exp2/embs/
 
 # external code dependencies
 skip_thoughts/
