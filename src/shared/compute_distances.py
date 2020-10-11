@@ -129,7 +129,7 @@ if __name__=="__main__":
 	import argparse
 
 	p = argparse.ArgumentParser("""Computing distances for sentences pairs.
-		Takes as input sentence embedding + tokenized sentence TSV (see embs/).
+		Takes as input sentence embedding + tokenized sentence TSV.
 		Produces one JSON per sentence pair.""")
 	p.add_argument("--input", type=str, help="input file", required=True)
 	p.add_argument("--output", type=str, help="output file", default="output.json")
