@@ -98,31 +98,35 @@ done;
 for EMB_ARCH in ft gv6 gv840; do
   echo -e "\e[33m\e[1m ${EMB_ARCH} \e[0m";
   for EMB_FILE in $(find data/embs_exp2/${EMB_ARCH} -type f -name '*.tsv'); do
-    OUTPUT_FILE="${EMB_FILE%.tsv}.json";;
+    OUTPUT_FILE="${EMB_FILE%.tsv}.json";
     echo -e "\e[33m\e[1m ${EMB_FILE} => ${OUTPUT_FILE} \e[0m";
     python3 src/shared/compute_distances.py \
       --input $EMB_FILE \
       --output ${OUTPUT_FILE} \
       --meaning_only;
-  done
+  done;
 done;
 
 echo -e '\e[33m\e[1m 2b. compute distances (TED) \e[0m';
 for SCENARIO in base paraphrase; do
-  echo -e "\e[33m\e[1m ${SCENARIO} \e[0m";
+  echo -e "\e[33m\e[1m compute trees for scenario ${SCENARIO} \e[0m";
   for FILE in $(find data/exp2/csv/${SCENARIO} -type f); do
-    OUTPUT_FILE="data/exp2_trees/${SCENARIO}/$(basename ${FILE%.csv}.trees.tsv)";
+    OUTPUT_FILE="data/trees_exp2/${SCENARIO}/$(basename ${FILE%.csv}.trees.tsv)";
     echo -e "\e[33m\e[1m ${FILE} => ${OUTPUT_FILE} \e[0m";
     python3 src/exp2_compute_trees.py \
       --input_file $FILE \
       --output_file $OUTPUT_FILE;
   done;
 done;
-for FILE in $(find data/exp2_trees -type f); do
+echo -e "\e[33m\e[1m compute TED \e[0m";
+for FILE in $(find data/trees_exp2 -type f -name '*.trees.tsv'); do
   OUTPUT_FILE="${FILE%.tsv}.dists.tsv";
   echo -e "\e[33m\e[1m ${FILE} => ${OUTPUT_FILE} \e[0m";
-  java -jar src/shared/apted/bin/apted.jar $FILE > $OUTPUT_FILE;
+  cut -f3,4 $FILE > tmp.trees;
+  java -jar src/shared/apted/bin/apted.jar tmp.trees > tmp.out;
+  paste $FILE tmp.out > $OUTPUT_FILE;
 done;
+rm tmp.trees tmp.out;
 
 echo -e '\e[33m\e[1m 2c. patch, merge and sort everything. \e[0m';
 for EMB_ARCH in w2v ft gv6 gv840; do
@@ -143,7 +147,7 @@ for SCENARIO in base paraphrase; do
       --json_file tmp-merge.json;
   done;
 done;
-
+rm tmp-merge.json;
 
 echo -e '\e[33m\e[1m 3. compute Mantel tests \e[0m';
 for SCENARIO in base paraphrase; do
