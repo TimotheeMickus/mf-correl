@@ -10,6 +10,7 @@ from scipy.stats import spearmanr
 import scipy
 import numpy as np
 import tqdm
+import multiprocessing as mp
 from shared.MantelTest.Mantel import test as mantel_test
 
 
@@ -117,6 +118,16 @@ def mantel(messages, categories, message_distance=levenshtein, meaning_distance=
     sM = np.array(list(it.starmap(meaning_distance, it.combinations(categories, 2))))
     return mantel_test(tM, sM, method=method, perms=perms)
 
+def process_file(input_file):
+    messages, categories = read_csv(input_file)
+
+    m_l = mantel(messages, categories)
+    m_ln = mantel(messages, categories, message_distance=levenshtein_normalised)
+    m_j = mantel(messages, categories, message_distance=jaccard, map_msg_to_str=False)
+
+    return input_file, m_l, m_ln, m_j
+
+
 if __name__=="__main__":
     import argparse
     parser = argparse.ArgumentParser("compute distances and mantels for artifical languages")
@@ -127,13 +138,7 @@ if __name__=="__main__":
 
     files = list(pathlib.Path(args.input_dir).glob("**/*.tsv"))
     output_file = args.output_file
-    with open(output_file, "w") as ostr:
-        for input_file in tqdm.tqdm(files):
-
-            messages, categories = read_csv(input_file)
-
-            m_l = mantel(messages, categories)
-            m_ln = mantel(messages, categories, message_distance=levenshtein_normalised)
-            m_j = mantel(messages, categories, message_distance=jaccard, map_msg_to_str=False)
-
+    with open(output_file, "w") as ostr, mp.Pool(mp.cpu_count()) as pool:
+        calls = pool.imap_unordered(process_file, files)
+        for input_file, m_l, m_ln, m_j in tqdm.tqdm(calls):
             print(input_file.name, 'levenshtein', *m_l, 'levenshtein normalized', *m_ln, 'jaccard', *m_j, file=ostr)
