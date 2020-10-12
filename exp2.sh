@@ -141,7 +141,7 @@ for SCENARIO in base paraphrase; do
     python3 src/shared/merge.py \
       --merge $(find data/embs_exp2/ -type f -name "run-${RUN}.json" | grep ${SCENARIO}) \
       --merged_file tmp-merge.json;
-    python3 src/shared/normalize_apted.py \
+    python3 src/exp2_normalize_apted.py \
       --output_file data/results_exp2/dists/${SCENARIO}/${RUN}.json \
       --tree_tsv_file data/trees_exp2/${SCENARIO}/run-${RUN}.trees.dists.tsv \
       --json_file tmp-merge.json;
@@ -159,7 +159,7 @@ done;
 
 echo -e '\e[33m\e[1m 4. Perform annotation \e[0m';
 FILE=data/results_exp2/dists/base/1.json
-python3 src/shared/convert_to_ranks.py \
+python3 src/exp2_convert_to_ranks.py \
   --files $FILE \
   --mdists l2-gv6 cdist-gv6 \
   --tdists lev lev_n lev_f lev_fn lev_syn lev_syn_n \
