@@ -140,5 +140,5 @@ if __name__=="__main__":
     output_file = args.output_file
     with open(output_file, "w") as ostr, mp.Pool(mp.cpu_count()) as pool:
         calls = pool.imap_unordered(process_file, files)
-        for input_file, m_l, m_ln, m_j in tqdm.tqdm(calls):
+        for input_file, m_l, m_ln, m_j in tqdm.tqdm(calls, total=len(files)):
             print(input_file.name, 'levenshtein', *m_l, 'levenshtein normalized', *m_ln, 'jaccard', *m_j, file=ostr)
