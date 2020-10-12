@@ -70,15 +70,15 @@ def full_pair_to_json(pair,
 
 	# text scores
 	text_scores = {
-		"levenshtein_score":levenshtein(c1, c2),
-		"levenshtein_n_score":levenshtein_normalised(c1, c2),
-		"levenshtein_f_score":levenshtein(c1_f, c2_f),
-		"levenshtein_fn_score":levenshtein_normalised(c1_f, c2_f),
+		"lev":levenshtein(c1, c2),
+		"lev_n":levenshtein_normalised(c1, c2),
+		"lev_f":levenshtein(c1_f, c2_f),
+		"lev_fn":levenshtein_normalised(c1_f, c2_f),
 	}
 	if include_jaccard:
 		text_scores.update({
-			"jaccard_score":jaccard(c1, c2),
-			"jaccard_f_score":jaccard(c1_f, c2_f),
+			"jac":jaccard(c1, c2),
+			"jac_f":jaccard(c1_f, c2_f),
 		})
 	if control_synonyms:
 		syn_s1 = list(map(default_synonym, s1))
@@ -87,15 +87,15 @@ def full_pair_to_json(pair,
 		syn_s1_f, syn_s2_f = (w for w in syn_s1 if w not in stops), (w for w in syn_s2 if w not in stops)
 		syn_c1_f, syn_c2_f = to_chr_seq(w2c, syn_s1_f), to_chr_seq(w2c, syn_s2_f)
 		text_scores.update({
-			"levenshtein_syn_score":levenshtein(syn_c1, syn_c2),
-			"levenshtein_syn_n_score":levenshtein_normalised(syn_c1, syn_c2),
-			"levenshtein_syn_f_score":levenshtein(syn_c1_f, syn_c2_f),
-			"levenshtein_syn_fn_score":levenshtein_normalised(syn_c1_f, syn_c2_f),
+			"lev_syn":levenshtein(syn_c1, syn_c2),
+			"lev_syn_n":levenshtein_normalised(syn_c1, syn_c2),
+			"lev_syn_f":levenshtein(syn_c1_f, syn_c2_f),
+			"lev_syn_fn":levenshtein_normalised(syn_c1_f, syn_c2_f),
 		})
 		if include_jaccard:
 			text_scores.update({
-				"jaccard_syn_score":jaccard(syn_c1, syn_c2),
-				"jaccard_syn_f_score":jaccard(syn_c1_f, syn_c2_f),
+				"jac_syn":jaccard(syn_c1, syn_c2),
+				"jac_syn_f":jaccard(syn_c1_f, syn_c2_f),
 			})
 
 	# return

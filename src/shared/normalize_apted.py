@@ -22,10 +22,10 @@ def merge_using_apted(tree_tsv_filename, json_filename, output_filename):
 		for tree_record, j_dict in zip(tree_istr, json_istr):
 			assert list(map(int, tree_record[:2])) == j_dict["idx"], "mismatched files"
 			n = normalisation(*tree_record[2:-1])
-			j_dict["text_scores"]["apted"] = float(tree_record[-1])
-			j_dict["text_scores"]["apted_n"] = j_dict["text_scores"]["apted"] / n
+			j_dict["text_scores"]["ted"] = float(tree_record[-1])
+			j_dict["text_scores"]["ted_n"] = j_dict["text_scores"]["ted"] / n
 			print(json.dumps(j_dict), file=ostr)
-			
+
 
 if __name__ == "__main__":
 	import argparse

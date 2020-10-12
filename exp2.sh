@@ -16,15 +16,15 @@ for SCENARIO in base paraphrase; do
   done;
   mkdir -p data/trees_exp2/${SCENARIO} data/results_exp2/dists/${SCENARIO};
 done;
-mkdir -p data/results_exp2/mantels data/results_exp2/men;
+mkdir -p data/results_exp2/mantels data/results_exp2/men data/results_exp2/annotations;
 
 
 echo -e '\e[33m\e[1m 1a. retrieve embeddings \e[0m';
 for SCENARIO in base paraphrase; do
   echo -e "\e[33m\e[1m ${SCENARIO} \e[0m";
   echo -e '\e[33m\e[1m Word2Vec \e[0m';
-  for FILE in $(find data/exp2/csv/$SCENARIO -type f); do
-    OUTPUT_FILE="data/embs_exp2/w2v/$SCENARIO/$(basename ${FILE%.csv}.tsv)";
+  for FILE in $(find data/exp2/csv/${SCENARIO} -type f); do
+    OUTPUT_FILE="data/embs_exp2/w2v/${SCENARIO}/$(basename ${FILE%.csv}.tsv)";
     python3 src/exp2_make_embeddings_file.py \
       --input_file $FILE \
       --output_file $OUTPUT_FILE \
@@ -32,8 +32,8 @@ for SCENARIO in base paraphrase; do
       --is_binary;
   done;
   echo -e '\e[33m\e[1m FastText \e[0m';
-  for FILE in $(find data/exp2/csv/$SCENARIO -type f); do
-    OUTPUT_FILE="data/embs_exp2/ft/$SCENARIO/$(basename ${FILE%.csv}.tsv)";
+  for FILE in $(find data/exp2/csv/${SCENARIO} -type f); do
+    OUTPUT_FILE="data/embs_exp2/ft/${SCENARIO}/$(basename ${FILE%.csv}.tsv)";
     python3 src/exp2_make_embeddings_file.py \
       --input_file $FILE \
       --output_file $OUTPUT_FILE \
@@ -41,16 +41,16 @@ for SCENARIO in base paraphrase; do
       --is_fasttext;
   done;
   echo -e '\e[33m\e[1m GloVe 6B \e[0m';
-  for FILE in $(find data/exp2/csv/$SCENARIO -type f); do
-    OUTPUT_FILE="data/embs_exp2/gv6/$SCENARIO/$(basename ${FILE%.csv}.tsv)";
+  for FILE in $(find data/exp2/csv/${SCENARIO} -type f); do
+    OUTPUT_FILE="data/embs_exp2/gv6/${SCENARIO}/$(basename ${FILE%.csv}.tsv)";
     python3 src/exp2_make_embeddings_file.py \
       --input_file $FILE \
       --output_file $OUTPUT_FILE \
       --embs_path ${EMB_GV6};
   done;
   echo -e '\e[33m\e[1m GloVe 840B \e[0m';
-  for FILE in $(find data/exp2/csv/$SCENARIO -type f); do
-    OUTPUT_FILE="data/embs_exp2/gv840/$SCENARIO/$(basename ${FILE%.csv}.tsv)";
+  for FILE in $(find data/exp2/csv/${SCENARIO} -type f); do
+    OUTPUT_FILE="data/embs_exp2/gv840/${SCENARIO}/$(basename ${FILE%.csv}.tsv)";
     python3 src/exp2_make_embeddings_file.py \
       --input_file $FILE \
       --output_file $OUTPUT_FILE \
@@ -139,11 +139,11 @@ for SCENARIO in base paraphrase; do
   for RUN in $(seq 1 5); do
     echo -e "\e[33m\e[1m merge all distances for run ${RUN}, scenario ${SCENARIO} \e[0m";
     python3 src/shared/merge.py \
-      --merge $(find data/embs_exp2/ -type f -name "run-${RUN}.json" | grep $SCENARIO) \
+      --merge $(find data/embs_exp2/ -type f -name "run-${RUN}.json" | grep ${SCENARIO}) \
       --merged_file tmp-merge.json;
     python3 src/shared/normalize_apted.py \
-      --output_file data/results_exp2/dists/${RUN}.json \
-      --tree_tsv_file data/trees_exp2/$SCENARIO/run-${RUN}.trees.dist.tsv \
+      --output_file data/results_exp2/dists/${SCENARIO}/${RUN}.json \
+      --tree_tsv_file data/trees_exp2/${SCENARIO}/run-${RUN}.trees.dists.tsv \
       --json_file tmp-merge.json;
   done;
 done;
@@ -158,6 +158,16 @@ for SCENARIO in base paraphrase; do
 done;
 
 echo -e '\e[33m\e[1m 4. Perform annotation \e[0m';
+FILE=data/results_exp2/dists/base/1.json
+python3 src/shared/convert_to_ranks.py \
+  --files $FILE \
+  --mdists l2-gv6 cdist-gv6 \
+  --tdists lev lev_n lev_f lev_fn lev_syn lev_syn_n \
+  --output_prefix data/results_exp2/annotations/rankdiff;
 
+python3 src/exp2_annotate.py \
+  --input_dir data/results_exp2/annotations \
+  --data_file data/exp2/csv/base/run-1.csv \
+  --output_file data/results_exp2/manual-annotations.tsv
 
 deactivate;

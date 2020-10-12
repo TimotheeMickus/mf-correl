@@ -37,7 +37,7 @@ def do_ranking(filename, score_type, dist, prec = 10**6):
 		if new_rnk:
 			current_value = i + 1
 		rank.append(current_value)
-	
+
 	vals = sorted(zip(idx, rank), key=lambda p:p[0])
 	tmp_dir = pathlib.Path(".tmp/%s/%s" % (score_type, dist))
 	tmp_dir.mkdir(parents=True, exist_ok=True)
@@ -73,11 +73,11 @@ def extract_worst(filename, meaning, text, output_prefix, num=100):
 		rnk_diff = _cpt_rnk_dif(p)
 		assert idx_m == idx_t, "sorting problem: " + str(idx_t) + " " + str(idx_m) + " " + text + " " + meaning
 		j_dict = {
-			"idx":idx_m, 
+			"idx":idx_m,
 			meaning:{
-				"ord":ord_m, 
+				"ord":ord_m,
 				"rnk":rnk_m,
-			}, 
+			},
 			text:{
 				"ord":ord_t,
 				"rnk":rnk_t,
@@ -128,10 +128,10 @@ def get_configs_for_extract(files, output_prefix, mdist=[], tdist=[]):
 	# loop 2 for extracting 100 worst
 	for filename in files:
 		ex = next(get_raw_data(filename))
-		for meaning in mdist or ex["meaning_scores"]: 
+		for meaning in mdist or ex["meaning_scores"]:
 			for text in tdist or ex["text_scores"]:
 				yield filename, meaning, text, output_prefix
-		
+
 
 def _cnt_cfgs_extr(files, mdist=[], tdist=[]):
 	# number of loop 2 iters
@@ -155,23 +155,22 @@ if __name__ == "__main__":
 
 
 	with Pool(cpu_count()) as pool:
-		# loop 1		
+		# loop 1
 		print(datetime.datetime.now(), "pre-ranking")
 
 		configs = list(get_configs_for_ranking(args.files, mdist=args.mdists, tdist=args.tdists))
 		n_configs = _cnt_cfgs_rnk(args.files, mdist=args.mdists, tdist=args.tdists)
-		
+
 		for _ in tqdm.tqdm(pool.imap_unordered(do_ranking_single_arg, configs), total=n_configs):
 			pass
 
-	with Pool(cpu_count() // 2) as pool:
+	with Pool(cpu_count()) as pool:
 		# loop 2
 		print(datetime.datetime.now(), "extracting worst items")
 
 		configs = get_configs_for_extract(args.files, args.output_prefix, mdist=args.mdists, tdist=args.tdists)
 		n_configs = _cnt_cfgs_extr(args.files, mdist=args.mdists, tdist=args.tdists)
-	
+
 		for _ in tqdm.tqdm(pool.imap_unordered(extract_single_arg, configs), total=n_configs):
 			pass
 	print(datetime.datetime.now(), "all done.")
-	

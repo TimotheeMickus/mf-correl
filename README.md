@@ -17,7 +17,7 @@ Data is available under `data/`, subdirectories correspond to different experime
 
 "Push-button" scripts are available to reproduce experiments: [`exp1.sh`](exp1.sh), [`exp2.sh`](exp2.sh), [`exp3.sh`](exp3.sh).
 
-**NB: Temp files produced for experiments 2 & 3 are quite large (> 50Gb).**
+**NB: Temp files produced for experiments 2 & 3 are very large (> 150Gb). Consider running part of the experiments or make sure you have dedicated free space.**
 
 ## Acknowledgments
 
