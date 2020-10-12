@@ -2,11 +2,12 @@
 .venv3/
 .venv2/
 
-# python caches, pickle objects, zips...
+# python caches, pickle objects, zips, temp files...
 __pycache__/
 **/*.pkl
 **/*.zip
 **/*.pyc
+tmp*
 
 # external data for evaluation purposes
 data/SICK/
@@ -19,9 +20,10 @@ MantelTest/
 InferSent/
 
 # files produced by experiments
+data/exp1/
+data/results_exp1/
 data/embs_exp2/
-data/embs_exp3/
 data/results_exp2/
-data/trees_exp2/
+data/embs_exp3/
 data/results_exp3/
-tmp*
+data/trees_exp2/
